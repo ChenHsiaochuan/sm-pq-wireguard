@@ -182,9 +182,8 @@ GPL v3 — see each version's source headers.
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{chen2026smpqwireguard,
-  title   = {A Hybrid Post-Quantum WireGuard with Cryptographic Agility:
-             Instantiation with the SM Suite and Flexible KEM Switching},
-  author  = {Xiaochuan Chen and Yifan Zheng and Taolong Su and Feng Zhang and Zhe Liu}
+@article{smpqwireguard,
+  title = {A Hybrid Post-Quantum WireGuard with Cryptographic Agility:
+           Instantiation with the SM Suite and Flexible KEM Switching}
 }
 ```
