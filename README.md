@@ -38,8 +38,8 @@ Each version is self-contained and can be built and tested independently.
 | `run_basic_test.sh` | Quick smoke-test script |
 | `run_docker_clean.sh` | Docker cleanup helper |
 
-v5 adds `OPTIMIZATION.md`; v6 adds `AGILITY.md`, `FORMAL_VERIFICATION_RESULTS.md`,
-and `TWO_DEVICE_TEST.md`.
+v5 adds `OPTIMIZATION.md`; v6 adds `AGILITY.md` and
+`FORMAL_VERIFICATION_RESULTS.md`.
 
 ---
 
@@ -111,14 +111,6 @@ The static identity KEM (Classic McEliece-460896) remains fixed across all suite
 
 > Only ML-KEM-512 and Kyber-512 fit within the IPv6 MTU (1280 B);
 > larger suites rely on IP fragmentation.
-
-### Two-Device End-to-End Test
-
-See `v6_agility/TWO_DEVICE_TEST.md` for a step-by-step guide to running
-SM-PQ-WireGuard between two real machines (WSL ↔ Mac/Docker), including
-iperf3 encrypted throughput testing and live KEM switching.
-
----
 
 ##  Version Evolution
 
