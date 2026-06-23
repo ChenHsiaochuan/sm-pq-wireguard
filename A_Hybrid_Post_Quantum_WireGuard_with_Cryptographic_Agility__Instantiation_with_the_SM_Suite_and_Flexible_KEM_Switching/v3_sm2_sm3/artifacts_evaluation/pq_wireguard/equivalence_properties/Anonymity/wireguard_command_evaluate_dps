@@ -1,0 +1,2 @@
+deepsec deepsec-anonymity-initiator-no-reveal.dps > deepsec-anonymity-initiator-no-reveal.dps.log
+deepsec deepsec-anonymity-responder-no-reveal.dps > deepsec-anonymity-responder-no-reveal.dps.log

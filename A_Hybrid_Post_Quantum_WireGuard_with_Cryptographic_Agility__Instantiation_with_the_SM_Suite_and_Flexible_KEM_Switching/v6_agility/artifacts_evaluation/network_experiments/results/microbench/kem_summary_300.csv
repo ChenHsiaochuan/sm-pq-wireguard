@@ -1,0 +1,13 @@
+role,suite,token,family,handshake_ms,handshake_sd,onwire_bytes
+init,1,ml-kem-512,MlKem,0.670752,0.329274,1110
+respond,1,ml-kem-512,MlKem,1.308620,0.646100,1018
+init,2,ml-kem-768,MlKem,0.768433,0.423114,1494
+respond,2,ml-kem-768,MlKem,1.432321,0.757767,1338
+init,3,ml-kem-1024,MlKem,0.832774,0.480606,1878
+respond,3,ml-kem-1024,MlKem,1.548584,0.851017,1818
+init,17,kyber-512,Kyber,0.789570,0.450479,1110
+respond,17,kyber-512,Kyber,1.485414,0.823494,1018
+init,33,hqc-128,Hqc,2.585852,1.449611,2559
+respond,33,hqc-128,Hqc,3.446734,0.872726,4683
+init,49,frodo-640-aes,FrodoKem,0.870469,0.285091,9926
+respond,49,frodo-640-aes,FrodoKem,1.494954,0.456637,9970

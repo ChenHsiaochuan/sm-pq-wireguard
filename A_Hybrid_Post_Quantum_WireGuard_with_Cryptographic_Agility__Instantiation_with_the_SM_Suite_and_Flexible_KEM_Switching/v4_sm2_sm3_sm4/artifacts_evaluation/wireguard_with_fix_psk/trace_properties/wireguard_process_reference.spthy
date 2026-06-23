@@ -1,0 +1,32 @@
+/*
+ * Artifacts for Usenix 2025 paper "A Tale of Two Worlds, a Formal Story of WireGuard Hybridization"
+ */
+
+// beginning of process
+
+process:
+
+!
+(
+new ~ldhI; 
+new ~ldhR; 
+new ~psk;
+
+out(<'initiator', 'g'^~ldhI>);
+out(<'responder', 'g'^~ldhR>);
+
+(
+        (! Initiator(~ldhI, 'g'^~ldhR, ~psk))
+    |   (! Responder(~ldhR, 'g'^~ldhI, ~psk))
+    |   (! Initiator(~ldhR, 'g'^~ldhI, ~psk))
+    |   (! Responder(~ldhI, 'g'^~ldhR, ~psk))
+    | RevealLDH(~ldhI)
+    | RevealLDH(~ldhR)
+    | RevealPRE(~ldhI, ~ldhR)
+    | RevealPSK(~psk)
+
+)
+)
+
+// end of process
+

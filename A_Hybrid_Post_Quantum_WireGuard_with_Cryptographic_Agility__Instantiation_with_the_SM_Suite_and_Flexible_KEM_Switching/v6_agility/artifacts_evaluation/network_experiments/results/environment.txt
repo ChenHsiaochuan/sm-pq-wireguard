@@ -1,0 +1,17 @@
+# SM-PQ-WireGuard v6 network-experiment environment
+2026-06-23T16:11:20+08:00
+## uname
+Linux localhost 6.18.33.1-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Fri Jun  5 01:12:21 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+## rustc
+rustc 1.95.0 (59807616e 2026-04-14)
+## cargo
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+## ip
+ip utility, iproute2-5.15.0, libbpf 0.5.0
+## tc
+tc utility, iproute2-5.15.0, libbpf 0.5.0
+## python3
+Python 3.10.12
+## cpu
+model name	: 13th Gen Intel(R) Core(TM) i7-13700
+## static KEM = ClassicMcEliece460896; ephemeral suites via WG_KEM_SUITE

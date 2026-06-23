@@ -1,0 +1,6 @@
+proverif proverif-strong-secrecy-Psk-DH-Eic.pv > proverif-strong-secrecy-Psk-DH-Eic.pv.log
+proverif proverif-strong-secrecy-Psk-Eic-Erc.pv > proverif-strong-secrecy-Psk-Eic-Erc.pv.log
+proverif proverif-strong-secrecy-Psk-Sic-Eic.pv > proverif-strong-secrecy-Psk-Sic-Eic.pv.log
+proverif proverif-strong-secrecy-Psk-Sic-Erc.pv > proverif-strong-secrecy-Psk-Sic-Erc.pv.log
+proverif proverif-strong-secrecy-Psk-Src.pv > proverif-strong-secrecy-Psk-Src.pv.log
+proverif proverif-strong-secrecy-Sic-Src-Eic-Erc.pv > proverif-strong-secrecy-Sic-Src-Eic-Erc.pv.log

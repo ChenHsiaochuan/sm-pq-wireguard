@@ -1,0 +1,138 @@
+(*
+ * agility_suite_regression_bad.pv
+ *
+ * NEGATIVE (regression) companion to agility_suite_model.pv.
+ *
+ * This model deliberately REMOVES the response-suite binding check: the
+ * one-byte suite selector is sent as a cleartext field ALONGSIDE the
+ * authenticated InitHello instead of being covered by the PSK-keyed mac1 and
+ * mixed into the transcript.  Concretely:
+ *
+ *   - the initiator's mac1 covers (mt1, sidx, epk)        -- suite NOT inside
+ *   - the suite byte `cs` travels next to it, in the clear
+ *   - the responder reads the suite from that cleartext field and echoes it
+ *
+ * This is exactly the design defect the real protocol avoids by folding the
+ * suite byte into mac1 and the KDF (Section 3.4.1 / 3.5).  With the binding
+ * removed, a Dolev-Yao attacker flips the cleartext suite byte between the two
+ * peers while replaying the still-valid mac, so the responder accepts a suite
+ * the initiator never authenticated.
+ *
+ * Expected verdict (negative model):
+ *   - event(Bad)  : REACHABLE
+ *       (responder accepts a different suite than the initiator sent for the
+ *        same session index -- cross-suite / downgrade acceptance)
+ *
+ * If this model ever reported `not event(Bad) is true`, the positive model's
+ * suite-binding check would be vacuous and the agility framework's downgrade
+ * resistance would be unfalsifiable.  The pair (positive TRUE, negative
+ * REACHABLE) is what makes the suite-binding claim meaningful.
+ *)
+
+set reconstructTrace = true.
+
+(* ------------------------------------------------------------------ *)
+(* Channels                                                            *)
+(* ------------------------------------------------------------------ *)
+free att:channel.                 (* public network, full DY control   *)
+free ctrlI:channel [private].     (* referee link: initiator's true suite *)
+free ctrlR:channel [private].     (* referee link: responder's accepted suite *)
+
+(* ------------------------------------------------------------------ *)
+(* Public suite identifiers (the f_suite byte). Attacker knows both.   *)
+(* ------------------------------------------------------------------ *)
+free s1:bitstring.
+free s2:bitstring.
+
+(* ------------------------------------------------------------------ *)
+(* Primitives (identical to the positive model)                        *)
+(* ------------------------------------------------------------------ *)
+fun okay():bitstring.
+
+(* message-type tags: InitHello (mt1) vs RespHello (mt2), as on the wire *)
+const mt1:bitstring.
+const mt2:bitstring.
+
+fun kempk(bitstring, bitstring):bitstring.            (* kempk(sk, suite) -> pk *)
+fun encap(bitstring, bitstring, bitstring):bitstring. (* encap(pk, coins, suite) -> ct *)
+fun kemss(bitstring, bitstring, bitstring):bitstring. (* shared secret value *)
+reduc forall sk:bitstring, suite:bitstring, coins:bitstring;
+    decap(encap(kempk(sk,suite), coins, suite), sk, suite)
+      = kemss(kempk(sk,suite), coins, suite).
+
+fun mac(bitstring, bitstring):bitstring.
+reduc forall k:bitstring, m:bitstring; checkmac(k, m, mac(k,m)) = okay().
+fun kdf(bitstring):bitstring.
+fun senc(bitstring, bitstring):bitstring.
+reduc forall k:bitstring, m:bitstring; sdec(k, senc(k,m)) = m.
+
+(* ------------------------------------------------------------------ *)
+(* Events and secrecy witness                                         *)
+(* ------------------------------------------------------------------ *)
+event eISend(bitstring, bitstring).     (* sidx, suite chosen by initiator *)
+event eRAccept(bitstring, bitstring).   (* sidx, suite accepted by responder *)
+event Bad().
+
+free secret_payload:bitstring [private].
+
+(* ------------------------------------------------------------------ *)
+(* Queries                                                            *)
+(* ------------------------------------------------------------------ *)
+query sidx:bitstring, s:bitstring;
+    event(eRAccept(sidx,s)) ==> event(eISend(sidx,s)).
+(* WITH the binding removed, this MUST be reachable (the regression).  *)
+query event(Bad()).
+query attacker(secret_payload).
+
+(* ------------------------------------------------------------------ *)
+(* Initiator: suite byte is OUTSIDE the mac (regression).              *)
+(*   mac covers m1signed = (mt1, sidx, epk) only;                      *)
+(*   the suite `cs` is sent as a separate cleartext field.             *)
+(* ------------------------------------------------------------------ *)
+let Init(psk:bitstring, cs:bitstring) =
+    new ek:bitstring;
+    new sidx:bitstring;
+    let epk = kempk(ek, cs) in
+    let m1signed = (mt1, sidx, epk) in
+    event eISend(sidx, cs);
+    out(ctrlI, (sidx, cs));
+    (* BUG: suite `cs` rides next to the mac, not under it *)
+    out(att, (cs, m1signed, mac(psk, m1signed)));
+    in(att, (sresp:bitstring, m2signed:bitstring, t2:bitstring));
+    let (=mt2, =sidx, ct:bitstring) = m2signed in
+    if checkmac(psk, m2signed, t2) = okay() then
+    (* initiator decapsulates under whatever suite came back in the clear *)
+    let ss = decap(ct, ek, sresp) in
+    let k = kdf((sresp, sidx, epk, ct, ss)) in
+    out(att, senc(k, secret_payload)).
+
+(* ------------------------------------------------------------------ *)
+(* Responder: trusts the cleartext suite field (no response-suite      *)
+(* check), verifies only the mac over the suite-free transcript.       *)
+(* ------------------------------------------------------------------ *)
+let Resp(psk:bitstring) =
+    in(att, (srecv:bitstring, m1signed:bitstring, t1:bitstring));
+    let (=mt1, sidx:bitstring, epk:bitstring) = m1signed in
+    (* mac does NOT cover srecv, so a flipped suite still verifies *)
+    if checkmac(psk, m1signed, t1) = okay() then
+    new coins:bitstring;
+    let ct = encap(epk, coins, srecv) in
+    let ss = kemss(epk, coins, srecv) in
+    let k = kdf((srecv, sidx, epk, ct, ss)) in
+    let m2signed = (mt2, sidx, ct) in
+    event eRAccept(sidx, srecv);
+    out(ctrlR, (sidx, srecv));
+    out(att, (srecv, m2signed, mac(psk, m2signed))).
+
+(* ------------------------------------------------------------------ *)
+(* Referee: fires Bad iff one session index is accepted by the         *)
+(* responder under a different suite than the initiator authenticated  *)
+(* ------------------------------------------------------------------ *)
+let Referee() =
+    in(ctrlI, (sidx:bitstring, csi:bitstring));
+    in(ctrlR, (=sidx, csr:bitstring));
+    if csi <> csr then event Bad().
+
+process
+    new psk:bitstring;
+    ( !Init(psk, s1) | !Init(psk, s2) | !Resp(psk) | !Referee() )

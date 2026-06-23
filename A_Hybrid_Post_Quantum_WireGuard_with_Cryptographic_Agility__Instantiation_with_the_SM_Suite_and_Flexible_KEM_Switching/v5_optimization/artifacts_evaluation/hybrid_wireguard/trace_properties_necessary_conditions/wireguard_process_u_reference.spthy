@@ -1,0 +1,38 @@
+/*
+ * Artifacts for Usenix 2025 paper "A Tale of Two Worlds, a Formal Story of WireGuard Hybridization"
+ */
+
+// beginning of process
+
+process:
+
+!
+(
+new ~ldhI; event HonestK('g'^~ldhI);
+new ~ldhR; event HonestK('g'^~ldhR);
+new ~kemltkI; event HonestK(pk(~kemltkI));
+new ~kemltkR; event HonestK(pk(~kemltkR));
+new ~psk; event Honestpsk(~psk);
+
+out(<pk(~kemltkI), pk(~kemltkR)>);
+
+(
+      (! in(<pk2, pk3, psk2>); if (not(pk2 = pk(~kemltkI)) & not(pk3 = 'g'^~ldhI)) then Initiator(~kemltkI, ~ldhI, pk2, pk3, psk2))
+    | (! in(<pk2, pk3, psk2>); if (not(pk2 = pk(~kemltkI)) & not(pk3 = 'g'^~ldhI)) then Responder(~kemltkI, ~ldhI, pk2, pk3, psk2))
+    | (! in(<ltk1, sk1, pk2, pk3, psk2>); if (not(pk2 = pk(ltk1)) & not(pk3 = 'g'^sk1)) then Initiator(ltk1, sk1, pk2, pk3, psk2))
+    | (! in(<ltk1, sk1, pk2, pk3, psk2>); if (not(pk2 = pk(ltk1)) & not(pk3 = 'g'^sk1)) then Responder(ltk1, sk1, pk2, pk3, psk2))
+    | RevealKEMLtk(~kemltkI)
+    | RevealKEMLtk(~kemltkR)
+    | RevealLDH(~ldhI)
+    | RevealLDH(~ldhR)
+    | RevealPRE(~ldhI, ~ldhR)
+    | RevealPsk(~psk)
+
+
+
+)
+)
+
+// end of process
+
+

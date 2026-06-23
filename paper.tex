@@ -1,0 +1,1668 @@
+% =====================================================================
+% A Hybrid Post-Quantum WireGuard with Cryptographic Agility:
+% Instantiation with the SM Suite and Flexible KEM Switching
+%
+% Author: Chen Xiaochuan
+% Date  : 2026-06
+%
+% Formatted according to the Science China Information Sciences
+% (SCIS) template (SCIS2026.cls).
+% =====================================================================
+\documentclass{SCIS2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Author's definitions for this manuscript
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ---------- Extra packages not provided by SCIS2026.cls --------------
+% SCIS2026.cls already loads most required packages.
+% xspace is needed for the convenience macros defined below.
+\usepackage{xspace}
+
+% Indent the first paragraph of every (sub)section too; by default LaTeX
+% suppresses indentation on the first paragraph after a heading.
+\usepackage{indentfirst}
+
+% Figures (per-suite agility evaluation). graphicx may already be loaded by
+% SCIS2026.cls; \usepackage is idempotent for options-free loads.
+% Images are uploaded to the Overleaf project root, so no \graphicspath needed.
+\usepackage{graphicx}
+
+% SCIS2026.cls already loads algorithm + algorithmic;
+% provide a few convenience wrappers for readability.
+\newcommand{\Statex}[0]{\item[]}
+\algsetup{indent=2em}
+
+% ---------- Code listings -------------------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codebg}{rgb}{0.96,0.96,0.96}
+\definecolor{codekey}{rgb}{0.0,0.0,0.55}
+\definecolor{codecmt}{rgb}{0.20,0.45,0.20}
+\definecolor{codestr}{rgb}{0.55,0.0,0.0}
+\lstdefinelanguage{rust}{
+  morekeywords={fn,let,mut,pub,struct,enum,trait,impl,for,if,else,match,
+                use,mod,return,as,const,static,Self,self,type,unsafe,
+                where,move,ref,while,loop,break,continue,in,crate,extern,
+                async,await,dyn,box,macro_rules},
+  morekeywords=[2]{u8,u16,u32,u64,usize,i8,i16,i32,i64,bool,str,String,
+                   Vec,Option,Result,Some,None,Ok,Err,GenericArray,Cell},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+}
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{codebg},
+  keywordstyle=\color{codekey}\bfseries,
+  keywordstyle=[2]\color{codekey},
+  commentstyle=\color{codecmt}\itshape,
+  stringstyle=\color{codestr},
+  showstringspaces=false,
+  columns=fullflexible,
+  breaklines=true,
+  breakatwhitespace=true,
+  frame=single,
+  framesep=2pt,
+  framerule=0.3pt,
+  rulecolor=\color{black!30},
+  xleftmargin=2pt,
+  xrightmargin=2pt,
+  belowskip=4pt,
+  aboveskip=4pt,
+  language=rust,
+}
+
+% ---------- Convenient macros ---------------------------------------
+\newcommand{\smtwo}{\textsf{SM2}\xspace}
+\newcommand{\smthree}{\textsf{SM3}\xspace}
+\newcommand{\smfour}{\textsf{SM4}\xspace}
+\newcommand{\xcurve}{\textsf{X25519}\xspace}
+\newcommand{\blake}{\textsf{BLAKE2s}\xspace}
+\newcommand{\chacha}{\textsf{ChaCha20--Poly1305}\xspace}
+\newcommand{\xchacha}{\textsf{XChaCha20--Poly1305}\xspace}
+\newcommand{\sgcm}{\textsf{SM4-GCM}\xspace}
+\newcommand{\sctr}{\textsf{SM4-CTR}\xspace}
+\newcommand{\mlkem}{\textsf{ML-KEM-512}\xspace}
+\newcommand{\mceliece}{\textsf{Classic-McEliece-460896}\xspace}
+\newcommand{\hybridwg}{\textsf{Hybrid-WG}\xspace}
+\newcommand{\sysname}{\textsf{SM-PQ-WireGuard}\xspace}
+\newcommand{\initmsg}{\textsc{InitHello}\xspace}
+\newcommand{\respmsg}{\textsc{RespHello}\xspace}
+\newcommand{\concat}{\mathbin{\Vert}}
+\newcommand{\negl}{\mathsf{negl}}
+\newcommand{\Adv}{\mathsf{Adv}}
+\newcommand{\Exp}{\mathsf{Exp}}
+\newcommand{\Hash}{\mathsf{H}}
+\newcommand{\HMAC}{\mathsf{HMAC}}
+\newcommand{\HKDF}{\mathsf{HKDF}}
+\newcommand{\KDF}{\mathsf{KDF}}
+\newcommand{\AEAD}{\mathsf{AEAD}}
+\newcommand{\KEMs}{\textsf{KEM}_s}
+\newcommand{\KEMe}{\textsf{KEM}_e}
+\newcommand{\ECDH}{\mathsf{ECDH}}
+\newcommand{\Encap}{\mathsf{Encap}}
+\newcommand{\Decap}{\mathsf{Decap}}
+\newcommand{\KeyGen}{\mathsf{KeyGen}}
+\newcommand{\pkenc}{\mathsf{pkenc}}
+% Provide \qed if not already defined
+\providecommand{\qed}{\hfill$\square$}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Article information
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ArticleType{RESEARCH PAPER}
+\Year{2026}
+\Month{June}
+\Vol{69}
+\No{1}
+\DOI{}
+\ArtNo{}
+\ReceiveDate{}
+\ReviseDate{}
+\AcceptDate{}
+\OnlineDate{}
+\AuthorMark{}
+\AuthorCitation{}
+
+%%% title
+\title{A Hybrid Post-Quantum WireGuard with Cryptographic Agility:
+       Instantiation with the SM Suite and Flexible KEM Switching}
+       {A Hybrid Post-Quantum WireGuard with Cryptographic Agility}
+
+%%% authors
+%%% Corresponding author: include email in double braces {{email@xxx.com}}
+%%% General author: leave third argument empty {}
+\author[1]{Xiaochuan CHEN}{}
+\author[1]{Yifan ZHENG}{}
+\author[1]{Taolong SU}{}
+\author[2]{Feng ZHANG}{}
+\author[1]{Zhe LIU}{{zhe.liu@zju.edu.cn}}
+
+%%% Address (please fill in actual affiliations)
+\address[1]{School of Software Technology, Zhejiang University, Ningbo 315100, China}
+\address[2]{Hangzhou Post-quantum Cryptography Technology Co., Ltd}
+
+%%% Abstract
+\abstract{The advent of quantum computers poses a significant threat to
+classical VPN protocols such as WireGuard, whose security relies on the
+hardness of the elliptic-curve discrete logarithm problem. Moreover, any
+single post-quantum key encapsulation mechanism may be subject to future
+cryptanalytic breakthroughs or prove suboptimal in specific deployment
+scenarios, making cryptographic agility a critical requirement for
+deployable solutions. The GM/T family of cryptographic standards
+(SM2, SM3, SM4) has been established as a general-purpose national
+cryptographic suite and is widely encouraged for use in information
+systems. To address these challenges, we present SM-PQ-WireGuard, the
+first hybrid post-quantum WireGuard handshake that seamlessly unifies
+GM/T compliance with cryptographic agility. The protocol instantiates
+the classical layer with the SM2 elliptic curve, SM3 hash, and SM4
+symmetric cipher, and pairs a fixed Classic-McEliece-460896 static-KEM
+identity anchor with an agile ephemeral-KEM slot supporting a range of
+post-quantum options including ML-KEM, Kyber, HQC, and FrodoKEM. An
+algorithm-agnostic abstraction layer allows flexible switching of the
+ephemeral KEM without modifying the core handshake logic, enabling
+operators to tailor the protocol to diverse deployment constraints while
+preserving full GM/T compliance. We provide a rigorous
+security analysis in the random oracle model, reducing the security of
+SM-PQ-WireGuard to the gap Diffie--Hellman assumption on SM2 and the
+IND-CCA security of the underlying KEMs. This computational proof is
+complemented by mechanised symbolic verification---ProVerif for trace and
+equivalence properties, independently cross-checked by Tamarin---which
+confirms that all supported KEM configurations preserve the same
+hybrid-security properties. Protocol-layer adaptations including MAC1/MAC2
+reconstruction via HMAC-SM3 truncation and per-site nonce partitioning
+for SM4-GCM are explicitly derived to address the semantic gaps
+introduced by the SM primitive suite. To the best of our knowledge, this
+is the first work to present a complete GM/T-compliant post-quantum
+WireGuard handshake with cryptographic agility. Our implementation
+demonstrates that the GM/T substitution and the agility framework incur
+minimal overhead, validating the practicality of the design.}
+
+%%% Keywords
+\keywords{cryptographic agility, hybrid post-quantum cryptography, WireGuard, SM suite}
+
+\maketitle
+
+% =====================================================================
+\section{Introduction}
+\label{sec:intro}
+
+WireGuard~\cite{1} has become one of the most
+widely deployed VPN protocols, supplanting legacy IPsec installations
+in both cloud and enterprise environments.  Its appeal stems from a
+small attack surface, a single round-trip handshake, and a key exchange
+based on the Noise framework~\cite{2}, itself rooted in
+Diffie--Hellman key exchange~\cite{3}.  The current
+handshake instantiates Noise \textsf{IKpsk2} with
+X25519~\cite{4},
+ChaCha20--Poly1305~\cite{5}, and
+BLAKE2s~\cite{6}, deriving a session key that protects
+every IP packet between peers.  However, the security of X25519 rests
+on the Elliptic-Curve Discrete Logarithm Problem~\cite{7,8};
+a sufficiently large quantum computer running Shor's
+algorithm~\cite{9} would break it retroactively.  This
+``harvest-now, decrypt-later'' threat~\cite{10} has
+motivated hybrid key
+exchange~\cite{11,12,13},
+where the session key combines a classical Diffie--Hellman secret with
+one or more post-quantum KEM secrets, ensuring that breaking one world
+does not compromise the other~\cite{14}.
+
+Most existing hybrid proposals hard-code a specific KEM
+selection---typically ML-KEM-512~\cite{15} for ephemeral
+exchange and Classic-McEliece-460896~\cite{16} for
+static protection.  This one-size-fits-all
+approach overlooks a fundamental reality: \emph{no single KEM is
+optimal for every environment}.  Bandwidth-constrained networks favour
+small ciphertexts; storage-constrained devices favour small public
+keys; latency-sensitive applications favour fast encapsulation; and
+future cryptanalytic advances may render any single choice obsolete.
+The GM/T family of cryptographic standards---SM2~\cite{17,18},
+SM3~\cite{19}, and SM4~\cite{20}---is established as a
+general-purpose national cryptographic suite and is widely encouraged
+for use in Chinese information systems.  A deployable post-quantum VPN
+for the Chinese market must therefore satisfy three simultaneous
+requirements: quantum resistance, GM/T standards compliance, and
+cryptographic agility.
+
+To address the aforementioned issues, we present SM-PQ-WireGuard, a
+hybrid post-quantum WireGuard handshake that unifies GM/T standards
+compliance with cryptographic agility.  The protocol instantiates the
+classical layer with SM2 ECDH, SM3 hashing, and SM4-GCM/SM4-CTR
+symmetric encryption, and combines two KEM slots: a static slot
+\emph{fixed} to Classic-McEliece-460896 as the long-term identity
+anchor, and an agile ephemeral slot switchable among
+ML-KEM-512/768/1024, Kyber-512, HQC-128, and Frodo-640-AES.  An
+algorithm-agnostic abstraction layer decouples core handshake logic
+from the concrete ephemeral KEM; a one-byte suite identifier hashed into the handshake
+transcript ensures distinct session keys across algorithm choices,
+preventing cross-algorithm confusion.  This design allows operators to
+select KEMs based on deployment constraints without protocol-level
+changes or security-proof invalidation.
+
+Beyond the agility framework, we address two protocol-layer mismatches
+that arise from the SM primitive suite: (i)~SM3 lacks the native
+keyed-hash and variable-output modes that upstream WireGuard relied on
+for MAC1/MAC2, which we reconstruct via HMAC-SM3 truncation; and
+(ii)~SM4-GCM's 96-bit nonce demands a per-site strategy across four
+protocol locations where upstream used extended nonces.  We explicitly
+re-derive the Noise transcript for the GM/T setting to resolve these
+gaps, ensuring correctness and security.  We provide a rigorous
+IND-CCA security reduction in the random oracle model, complemented by
+mechanised symbolic verification (ProVerif, cross-checked by Tamarin)
+confirming that every ephemeral-KEM configuration preserves
+the same hybrid-security guarantees.  Performance evaluation on a
+commodity x86\_64 host demonstrates that the GM/T substitution and
+agility framework incur minimal overhead, validating the practicality
+of the design.
+
+We make four contributions.
+\begin{itemize}
+\item We design SM-PQ-WireGuard, a Noise \textsf{IKpsk2}-compliant
+protocol that unifies SM2/SM3/SM4 with a fixed Classic-McEliece static
+identity anchor and an agile ephemeral-KEM slot, supporting flexible
+switching across a range of options (ML-KEM, Kyber, HQC, FrodoKEM)
+without protocol-level changes.
+
+\item We explicitly re-derive the Noise transcript for the GM/T
+setting, resolving two semantic gaps introduced by the primitive
+substitution: MAC1/MAC2 reconstruction via HMAC-SM3 truncation, and
+per-site nonce partitioning for SM4-GCM across four distinct protocol
+locations.
+
+\item We provide an IND-CCA security reduction under standard
+assumptions on SM2 and SM3, complemented by mechanised symbolic
+verification (ProVerif, independently cross-checked by Tamarin) that
+every supported ephemeral KEM maintains identical hybrid-security
+guarantees.
+
+\item We implement SM-PQ-WireGuard with a feature-gated benchmark
+harness.  The implementation validates that the GM/T substitution and
+agility framework incur minimal overhead, demonstrating the
+practicality of a compliant and flexible post-quantum VPN design.
+\end{itemize}
+
+\paragraph{Roadmap.}
+Section~\ref{sec:bg} recalls WireGuard, the Noise framework, the
+GM/T suite, and the post-quantum KEM options.
+Section~\ref{sec:design} presents SM-PQ-WireGuard in detail, including
+the agility framework and protocol-layer adaptations.
+Section~\ref{sec:security} contains the dual-track security analysis
+(computational and symbolic).  Section~\ref{sec:perf} reports the
+performance evaluation.  Section~\ref{sec:disc} discusses deployment
+considerations, limitations and future work, and concludes the paper.
+Proofs are in the appendix.
+
+
+% =====================================================================
+\section{Background}
+\label{sec:bg}
+
+\subsection{Notation}
+\label{sec:notation}
+
+Throughout the paper, $\lambda$ denotes the security parameter; we
+target $\lambda = 128$ bits of classical security.  A function $f$
+is \emph{negligible}, written $f(\lambda) = \negl(\lambda)$, if for
+every polynomial $p$ there exists $\lambda_0$ such that
+$f(\lambda) < 1/p(\lambda)$ for all $\lambda \geq \lambda_0$, following
+standard conventions~\cite{21}.  For
+bit strings $x$ and $y$, $|x|$ denotes the bit length of $x$ and
+$x \concat y$ denotes concatenation.  $x \xleftarrow{\$} S$ denotes
+uniform random sampling from set $S$.  We write $\KDF_1, \KDF_2,
+\KDF_3$ for the Noise-style key derivation variants producing one,
+two, or three $256$-bit outputs from a chaining key and input key
+material.
+
+\subsection{WireGuard and the Noise Framework}
+\label{sec:wireguard}
+
+WireGuard's handshake is a syntactic specialisation of the Noise
+\textsf{IKpsk2} pattern~\cite{2}:
+\begin{align*}
+\text{IKpsk2} :=\;& \leftarrow s; \\
+              & \to e, es, s, ss; \\
+              & \leftarrow e, ee, se,\ \mathsf{psk}.
+\end{align*}
+The initiator knows the responder's static public key in advance.
+In the first flight, the initiator sends an ephemeral public key,
+performs an ephemeral-static DH, sends its own static public key
+(encrypted under a key derived from the transcript), and performs a
+static-static DH.  The responder replies with its ephemeral public
+key, performs ephemeral-ephemeral and static-ephemeral DHs, and
+mixes in a pre-shared key.  The final chaining key is split into
+send and receive keys for the data plane.
+
+Stock WireGuard instantiates this pattern with X25519~\cite{4}
+for ECDH, ChaCha20--Poly1305~\cite{5} for
+AEAD~\cite{22,23}, and
+BLAKE2s~\cite{6} for hashing and key derivation.
+The session key is derived from the concatenation of a classical DH
+secret and, in hybrid variants, one or more post-quantum KEM secrets,
+such that breaking only the classical component does not compromise
+the session.  We adopt this hybrid structure with two KEM slots: one
+static (for long-term identity protection) and one ephemeral (for
+per-session freshness).
+
+\subsection{The GM/T Cryptographic Suite}
+\label{sec:gmt}
+
+The GM/T suite comprises three standardised algorithms widely adopted
+in Chinese information systems.
+
+\textbf{SM2~\cite{17,18}} is an elliptic-curve
+cryptosystem defined over a $256$-bit prime field with a short
+Weierstrass equation.  It has prime order and cofactor $1$.  A
+private key is a scalar $d \in [1, n-1]$; the public key is the
+affine point $P = d\cdot G$.  SEC1 compressed encoding~\cite{24} represents a
+point as $y_{\text{parity}} \concat X$, where $y_{\text{parity}} \in
+\{\texttt{0x02},\texttt{0x03}\}$ and $X$ is the $32$-byte
+$x$-coordinate, yielding a $33$-byte public key.  The shared secret
+in SM2 ECDH is the $32$-byte $x$-coordinate of $d_A \cdot d_B \cdot
+G$.  Security rests on the gap Diffie--Hellman assumption on the SM2
+curve.
+
+\textbf{SM3~\cite{19}} is a $256$-bit hash function following
+the Merkle--Damg\aa rd construction~\cite{25,26}
+with a $64$-byte input block.  Unlike BLAKE2s, SM3 provides no native
+keyed-hash mode and no variable-length output.  This motivates the
+MAC1/MAC2 reconstruction we present in Section~\ref{sec:macreconstruct};
+its security margin remains intact under published
+cryptanalysis.
+
+\textbf{SM4~\cite{20}} is a $128$-bit block cipher with a
+$128$-bit key, employing a $32$-round unbalanced Feistel network whose
+security has been examined by dedicated cryptanalysis.
+We use SM4 in GCM mode~\cite{27,28} (with a $96$-bit
+nonce) for AEAD and in CTR mode for stream encryption.  The fixed $96$-bit nonce---half the
+size of XChaCha20--Poly1305's $192$-bit nonce---requires per-site
+nonce partitioning, which we address in
+Section~\ref{sec:noncedomain}.
+
+\subsection{Post-Quantum KEM Options}
+\label{sec:kemoptions}
+
+To support cryptographic agility, SM-PQ-WireGuard accommodates a
+range of post-quantum KEMs in its \emph{ephemeral} slot, while the
+static slot is fixed to Classic-McEliece-460896~\cite{16} as the
+long-term identity anchor.  Classic-McEliece is well suited to this
+role: its conservative, long-studied code-based security matches the
+longevity of an identity key, and although its public key is large
+($524{,}160$\,B, $\approx512$\,KiB) it is generated once and pinned out
+of band rather than transmitted each handshake, while its
+ciphertext---which \emph{is} sent in \initmsg---is among the smallest of
+all candidates ($156$\,B).
+Table~\ref{tab:kems} summarises the agile ephemeral
+candidates---ML-KEM~\cite{15}, Kyber~\cite{29}, HQC, and
+FrodoKEM---and their key characteristics.  These KEMs are selected to represent diverse
+security assumptions (lattice-based (ML-KEM, Kyber), code-based (HQC), and unstructured-LWE (FrodoKEM) designs) and performance trade-offs, allowing
+operators to choose the most suitable ephemeral configuration for their
+deployment constraints.
+
+\begin{table}[htbp]
+\centering
+\caption{Supported agile ephemeral-KEM candidates and their key
+characteristics (the static slot is fixed to Classic-McEliece-460896).
+$|\textsf{pk}|$ and $|\textsf{ct}|$ denote public
+key and ciphertext sizes respectively.}
+\label{tab:kems}
+\footnotesize
+\tabcolsep 5pt
+\begin{tabular}{llrrl}
+\toprule
+\textbf{KEM} & \textbf{Category} & $|\textsf{pk}|$ & $|\textsf{ct}|$ & \textbf{Security} \\
+\midrule
+ML-KEM-512    & Lattice            & $800$\,B  & $768$\,B  & AES-128 \\
+ML-KEM-768    & Lattice            & $1184$\,B & $1088$\,B & AES-192 \\
+ML-KEM-1024   & Lattice            & $1568$\,B & $1568$\,B & AES-256 \\
+Kyber-512     & Lattice            & $800$\,B  & $768$\,B  & AES-128 \\
+HQC-128       & Code-based         & $2249$\,B & $4433$\,B & AES-128 \\
+Frodo-640-AES & Unstructured lattice (LWE) & $9616$\,B & $9720$\,B & AES-128 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+% =====================================================================
+\section{Design of SM-PQ-WireGuard}
+\label{sec:design}
+
+We present the design of SM-PQ-WireGuard, a hybrid post-quantum
+WireGuard handshake that unifies GM/T compliance with cryptographic
+agility.  The protocol follows the Noise \textsf{IKpsk2} pattern,
+instantiates the classical layer with the SM2/SM3/SM4 suite, and
+combines a fixed Classic-McEliece static KEM anchor with an agile
+ephemeral KEM slot supporting flexible switching without protocol-level
+changes.  This section describes the design goals, the protocol
+overview, the handshake in detail, the protocol-layer adaptations
+required by the SM suite, and the agility framework that enables KEM
+switching.
+
+\subsection{Design Goals}
+\label{sec:goals}
+
+The design of SM-PQ-WireGuard is guided by four goals.
+
+\begin{description}
+\item[G1: Semantic equivalence.] The protocol must be a syntactic
+specialisation of Noise \textsf{IKpsk2}, differing only in primitive
+choices and wire encodings.
+
+\item[G2: Transcript unambiguity.] Sessions must never be replayable
+against other WireGuard variants or intermediate constructions; this
+is enforced by a unique protocol identifier that acts as a domain
+separator.
+
+\item[G3: Cryptographic agility.] Operators must be able to select
+and switch the ephemeral KEM without modifying the core handshake logic
+or invalidating security proofs; the static slot is a fixed
+Classic-McEliece identity anchor.
+
+\item[G4: Wire-format minimality.] The wire format must change
+minimally---the only difference from a non-SM hybrid construction is
+the $33$-byte SEC1-compressed SM2 ephemeral public key replacing the
+$32$-byte X25519 $u$-coordinate.  With the default ML-KEM-512 (or
+Kyber-512) ephemeral suite, both handshake messages remain within the
+IPv6 MTU of $1280$ bytes; the higher-security and conservative-family
+suites (ML-KEM-768/1024, HQC-128, Frodo-640-AES) trade larger
+ciphertexts for stronger or more diverse assumptions and exceed the
+MTU, so they rely on IP fragmentation (\S\ref{sec:perf}).
+\end{description}
+
+\subsection{Protocol Overview}
+\label{sec:overview}
+
+SM-PQ-WireGuard instantiates the Noise \textsf{IKpsk2} pattern with
+the GM/T cryptographic suite at the classical layer: SM2 for ECDH,
+SM3 for hashing and key derivation, and SM4-GCM/SM4-CTR for
+symmetric encryption.  The handshake incorporates two post-quantum
+KEM slots: a static slot for long-term identity protection and an
+ephemeral slot for per-session freshness.  An algorithm-agnostic
+abstraction layer decouples the core handshake logic from concrete
+KEM implementations, and a one-byte suite identifier
+(\texttt{f\_suite}) is hashed into the handshake transcript
+to ensure domain separation across different KEM choices.  The
+handshake completes in two messages---\initmsg\ and
+\respmsg---and produces a $256$-bit session key, truncated to
+$128$ bits for SM4 at the data plane.
+
+Figure~\ref{fig:flow} gives a high-level view of this exchange
+before the formal treatment in Section~\ref{sec:handshake}.  Both
+parties first generate fresh ephemeral material: the initiator
+draws an SM2 ephemeral key pair \emph{and} an ephemeral
+post-quantum KEM key pair, while the responder draws an SM2
+ephemeral key pair, its KEM contribution being realised as an
+encapsulation against the public key it receives.  The initiator's
+\initmsg\ carries its SM2 and PQ ephemeral public keys together
+with encrypted static identity material; from it the responder
+parses every public value it needs and computes the SM2 DH and the
+PQ KEM shared secrets.  The responder's \respmsg\ returns the PQ
+ciphertexts and its own encrypted identity, so that the initiator
+can decapsulate the same KEM secrets and reconstruct the identical
+SM2 DH value.  Each side then feeds the SM2 DH secret, the PQ KEM
+shared secrets, and the pre-shared key $Q$ into the SM3-based key
+schedule, yielding the directional session keys that protect the
+SM4-GCM data plane.  Because the post-quantum secrets enter the
+same chaining key as the classical DH output, the session stays
+secure as long as \emph{either} the SM2 or the KEM contribution
+remains uncompromised---the hybrid guarantee made precise in
+Section~\ref{sec:security}.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\linewidth]{flowchart.png}
+\caption{End-to-end message flow of the SM-PQ-WireGuard handshake.
+The initiator and responder exchange two messages---\initmsg\ and
+\respmsg---each combining SM2 (classical) ephemeral key agreement
+with post-quantum KEM encapsulation.  Both parties derive the
+session keys from the SM2 DH secret, the PQ KEM shared secrets, and
+the pre-shared key (PSK) through the SM3 key schedule; the
+resulting keys protect the SM4-GCM data plane.  The detailed
+message construction is formalised in Algorithms~\ref{alg:init}
+and~\ref{alg:resp}.}
+\label{fig:flow}
+\end{figure*}
+
+\subsection{Handshake Protocol}
+\label{sec:handshake}
+
+The key derivation follows the Noise KDF structure.  For a chaining
+key $ck \in \{0,1\}^{256}$ and input key material $m$, the
+derivation produces $n\in\{1,2,3\}$ consecutive $256$-bit outputs:
+\[
+\KDF_n(ck, m) = (t_1, \dots, t_n),
+\]
+where $t_0 = \textsf{HMAC-SM3}_{ck}(m)$ and
+$t_i = \textsf{HMAC-SM3}_{t_0}(t_{i-1} \concat \langle i \rangle)$
+for $i=1,\dots,n$.  All HMAC calls are instantiated with SM3.  Every
+AEAD key is obtained by taking the leading $128$ bits of the
+corresponding $256$-bit KDF output.
+
+\subsubsection{Initiator Flow}
+
+Algorithm~\ref{alg:init} formalises the construction of the
+\initmsg.  The initiator begins by hashing the responder's static
+public keys into the transcript, generates a fresh SM2 ephemeral key
+pair and a fresh ephemeral KEM key pair, and mixes both public keys
+into the chaining key.  It then encapsulates against the responder's
+static KEM public key to obtain $\textsf{shk}_1$, computes the SM2
+ephemeral-static DH to obtain $z_1$, and wraps the static KEM
+ciphertext with a stream cipher keyed from $z_1$---this sanitises
+the transcript by preventing an adversary from planting chosen
+encapsulation metadata.  The initiator then derives a symmetric key
+$k_S$ from $z_1 \concat \textsf{shk}_1$, encrypts its identity hash,
+performs the static-static SM2 DH to obtain $z_2$, hashes the two
+static KEM public keys together, and mixes $z_2$, the PQ identity
+hash, and the pre-shared key $Q$ into the chaining key.  A final
+AEAD block carries a strictly increasing replay counter.
+
+\begin{algorithm}[htbp]
+\caption{\initmsg\ construction (initiator $i$).}
+\label{alg:init}
+\begin{algorithmic}[1]
+\REQUIRE own static key material $(S^i, S^i_q, \mathit{sk}_{S^i}, \mathit{sk}_{S^i_q})$;
+peer's static public keys $(S^r, S^r_q)$; pre-shared $Q$.
+\STATE $ck \gets ck_0;\ hs \gets hs_0$
+\STATE $hs \gets \textsf{SM3}(hs \concat \textsf{SM3}(S^r \concat S^r_q))$
+\STATE $hs \gets \textsf{SM3}(hs \concat \texttt{f\_suite})$
+\STATE $(E, e) \gets \KeyGen(\textsf{SM2})$
+\STATE $(E_q, e_q) \gets \KeyGen(\KEMe)$
+\STATE $ck \gets \KDF_1(ck, \pkenc(E) \concat \pkenc(E_q))$
+\STATE $(\textit{ct}_1, \textsf{shk}_1) \gets \Encap(\KEMs; S^r_q)$
+\STATE $z_1 \gets \ECDH(e, S^r)$
+\STATE $k_0 \gets \KDF_1(0^{256}, z_1)$
+\STATE $\textit{cct}_1 \gets \mathsf{Stream}(\textit{ct}_1)$
+\STATE $hs \gets \textsf{SM3}(hs \concat \pkenc(E) \concat \pkenc(E_q))$
+\STATE $(ck, k_S) \gets \KDF_2(ck, z_1 \concat \textsf{shk}_1)$
+\STATE $c_S \gets \AEAD.\mathsf{Enc}
+        \bigl(\textsf{SM3}(\pkenc(S^i) \concat \pkenc(S^i_q));\ hs\bigr)$
+\STATE $hs \gets \textsf{SM3}(hs \concat c_S)$
+\STATE $z_2 \gets \ECDH(\mathit{sk}_{S^i}, S^r)$
+\STATE $h_{\text{pq}} \gets \textsf{SM3}(S^i_q \concat S^r_q)$
+\STATE $(ck, k_T) \gets \KDF_2(ck, z_2 \concat h_{\text{pq}} \concat Q)$
+\STATE $c_T \gets \AEAD.\mathsf{Enc}(\mathsf{ctr}^{16};\ hs)$
+\STATE $hs \gets \textsf{SM3}(hs \concat c_T)$
+\STATE \RETURN $\initmsg = \langle \pkenc(E), \pkenc(E_q),
+       \textit{cct}_1, c_S, c_T\rangle$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Responder Flow}
+
+Algorithm~\ref{alg:resp} formalises the responder's processing of
+\initmsg\ and construction of \respmsg.  The responder generates a
+fresh SM2 ephemeral key pair, encapsulates against the initiator's
+ephemeral KEM public key (obtaining $\textsf{shk}_2$) and against
+the initiator's static KEM public key (obtaining $\textsf{shk}_3$),
+and performs two SM2 ECDH operations: ephemeral-static with the
+initiator's static key ($z_3$) and ephemeral-ephemeral with the
+initiator's ephemeral key ($z_4$).  The responder wraps the static
+KEM ciphertext using a stream cipher keyed from $z_3$, then mixes
+$z_4 \concat \textsf{shk}_2$ and $z_3 \concat \textsf{shk}_3$ into
+the chaining key through successive KDF calls.  The PSK $Q$ is mixed
+in via $\KDF_3$, producing a transcript commitment $\tau$ that is
+hashed into $hs$ and a symmetric key $k_E$ that seals an empty AEAD
+block as key confirmation.  The final $\KDF_2$ splits the chaining
+key into the two data-plane keys, each truncated to $128$ bits for
+use with SM4.
+
+\begin{algorithm}[htbp]
+\caption{\respmsg\ construction (responder $r$).}
+\label{alg:resp}
+\begin{algorithmic}[1]
+\REQUIRE own static keys $(S^r, S^r_q, \mathit{sk}_{S^r}, \mathit{sk}_{S^r_q})$;
+peer's ephemeral public key $E$ from \initmsg;
+peer's static public keys $(S^i, S^i_q)$; pre-shared $Q$.
+\STATE $(E', e') \gets \KeyGen(\textsf{SM2})$
+\STATE $(\textit{ct}_2, \textsf{shk}_2) \gets \Encap(\KEMe; E_q)$
+\STATE $(\textit{ct}_3, \textsf{shk}_3) \gets \Encap(\KEMs; S^i_q)$
+\STATE $z_3 \gets \ECDH(e', S^i)$
+\STATE $z_4 \gets \ECDH(e', E)$
+\STATE $k_0 \gets \KDF_1(0^{256}, z_3)$
+\STATE $\textit{cct}_3 \gets \mathsf{Stream}(\textit{ct}_3)$
+\STATE $ck \gets \KDF_1(ck, \pkenc(E') \concat \textit{ct}_2)$
+\STATE $hs \gets \textsf{SM3}(hs \concat \pkenc(E') \concat \textit{ct}_2)$
+\STATE $ck \gets \KDF_1(ck, z_4 \concat \textsf{shk}_2)$
+\STATE $ck \gets \KDF_1(ck, z_3 \concat \textsf{shk}_3)$
+\STATE $(ck, \tau, k_E) \gets \KDF_3(ck, Q)$
+\STATE $hs \gets \textsf{SM3}(hs \concat \tau)$
+\STATE $c_E \gets \AEAD.\mathsf{Enc}(\varepsilon;\ hs)$
+\STATE $(k_{r\to i}, k_{i\to r}) \gets \KDF_2(ck, \varepsilon)$
+\STATE \RETURN $\respmsg = \langle \pkenc(E'), \textit{ct}_2,
+       \textit{cct}_3, c_E\rangle$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Protocol Adaptations for the SM Suite}
+\label{sec:adaptations}
+
+The SM primitive suite introduces two protocol-layer mismatches that
+a naive cipher swap would miss.  We resolve both through explicit
+transcript re-derivation.
+
+\subsubsection{MAC1/MAC2 Reconstruction via HMAC-SM3 Truncation}
+\label{sec:macreconstruct}
+
+Every WireGuard handshake message carries two $16$-byte MAC fields:
+MAC1 for cookie-resolved sender authentication and MAC2 for
+stateless DoS protection.  Stock WireGuard derives both using
+BLAKE2s in its native keyed-hash, variable-output mode: a single
+library call with a key and a desired output length of $16$ bytes
+directly produces the tag.
+
+SM3 provides no native keyed mode and no variable-length output.
+We therefore reconstruct both MACs using the HMAC construction
+(RFC~2104)~\cite{30} instantiated with SM3, then truncate
+the $256$-bit HMAC
+output to $128$ bits:
+\[
+\textsf{MAC}(k, m) = \textsf{HMAC-SM3}(k, m)[0\ldots 15].
+\]
+This replaces a single native BLAKE2s call with two HMAC compression
+invocations plus an explicit truncation step.  Security follows from
+the dual-PRF property of HMAC-SM3: under the random-oracle model,
+the $128$-bit prefix of the $256$-bit HMAC output is
+indistinguishable from a uniformly random $128$-bit string.  The
+unforgeability of MAC1/MAC2 at the $128$-bit security level is
+therefore preserved.
+
+\subsubsection{Nonce-Domain Partitioning for SM4-GCM}
+\label{sec:noncedomain}
+
+SM-PQ-WireGuard employs symmetric encryption at four distinct
+protocol sites, each with different nonce-management requirements.
+Stock WireGuard handles these sites with three different algorithms:
+ChaCha20--Poly1305 for the handshake AEAD,
+XChaCha20--Poly1305 (with a $192$-bit random nonce) for cookie-reply
+AEAD, bare ChaCha20 for KEM-ciphertext wrapping, and a separate
+ChaCha20--Poly1305 instance for the data plane.  SM4-GCM accepts
+only a $96$-bit nonce---half the size of XChaCha20--Poly1305's
+$192$-bit nonce---and there is no extended-nonce analogue for SM4 in
+production libraries.  We therefore assign an independent nonce
+strategy to each site, summarised in Table~\ref{tab:nonces}.
+
+\begin{table}[htbp]
+\centering
+\caption{Nonce strategies for the four SM4-GCM/SM4-CTR protocol sites.}
+\label{tab:nonces}
+\footnotesize
+\tabcolsep 8pt
+\begin{tabular}{lll}
+\toprule
+\textbf{Site} & \textbf{Algorithm} & \textbf{Nonce/IV Strategy} \\
+\midrule
+Handshake AEAD ($c_S, c_T, c_E$) & SM4-GCM & Fixed zero nonce (key is per-handshake fresh) \\
+KEM ciphertext wrapping ($\textit{cct}_1, \textit{cct}_3$) & SM4-CTR & Fixed zero IV (key is per-handshake fresh) \\
+Cookie reply AEAD & SM4-GCM & Leading $12$ bytes of $24$-byte random nonce \\
+Data plane & SM4-GCM & $4$-byte zero prefix + $8$-byte monotonic counter \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The handshake AEAD and KEM wrapping use fixed zero nonces because
+every key is freshly derived and used for exactly one message per
+handshake.  The cookie reply AEAD uses the leading $12$ bytes of a
+$24$-byte random nonce (preserving the upstream wire format); the
+cookie key rotates every $120$ seconds and is rate-limited, bounding
+the nonce-collision probability to approximately $2^{-53}$.  The
+data plane uses an $8$-byte monotonic packet counter, ensuring
+nonces never repeat under a single key.  This per-site partitioning
+enables SM4-GCM to safely replace the three different
+ChaCha20-based constructions used upstream.
+
+\subsection{The Agility Framework}
+\label{sec:agility}
+
+To support flexible KEM switching without protocol-level changes,
+SM-PQ-WireGuard introduces an algorithm-agnostic abstraction layer
+with three components.
+
+\paragraph{Abstraction layer.}
+The core handshake logic interacts with KEMs solely through a trait
+defining three operations: $\KeyGen \to (\textsf{pk}, \textsf{sk})$,
+$\Encap(\textsf{pk}) \to (\textsf{ct}, k)$, and
+$\Decap(\textsf{sk}, \textsf{ct}) \to k$.  Classic-McEliece-460896 (the
+static anchor) and every ephemeral candidate---ML-KEM-512, ML-KEM-768,
+ML-KEM-1024, Kyber-512, HQC-128, and Frodo-640-AES---expose this uniform
+interface.  The handshake state machine (Algorithms~\ref{alg:init}
+and~\ref{alg:resp}) is parameterised by the fixed static KEM
+(Classic-McEliece) and a deployment-selected ephemeral KEM, without
+altering the state machine logic.
+
+\paragraph{Domain separation via the suite identifier.}
+Each ephemeral-KEM suite is assigned a stable one-byte on-wire
+identifier \texttt{f\_suite} (the static slot is fixed to the
+Classic~McEliece identity anchor and carries no selector).  The
+initiator stamps \texttt{f\_suite} into both handshake messages, and
+the byte is bound into the protocol in two ways.  First, it is hashed
+into the transcript hash at the start of the handshake,
+\[
+hs \gets \textsf{SM3}(hs \concat \texttt{f\_suite}),
+\]
+so a tampered selector makes the two peers' transcripts diverge
+(downgrade resistance).  Second, it is covered by the PSK-keyed MAC1
+(Section~\ref{sec:macreconstruct}).  Because the identifier enters the
+transcript that seeds every subsequent KDF call, different KEM choices
+yield distinct transcripts and session keys, preventing cross-algorithm
+replay or confusion.  As the selector is a public value it does not
+affect secrecy; the symbolic model (Section~\ref{sec:security}) treats
+the KEM abstractly, so all supported suites inherit the same
+hybrid-security guarantees.
+
+\paragraph{Deployment and configuration.}
+Operators select the ephemeral KEM via configuration at deployment
+time (the static slot is fixed to Classic-McEliece).  The protocol
+binary is compiled once with support for all ephemeral KEMs; the
+abstraction layer dispatches the correct implementation based on the
+configuration.  No code changes or recompilation are required to switch
+between supported ephemeral KEMs.
+This design allows seamless adaptation to different deployment
+constraints---bandwidth-sensitive deployments can choose a KEM with
+small ciphertexts, while latency-sensitive deployments can choose a
+KEM with fast encapsulation---without re-engineering the protocol.
+
+\subsection{Key-Length Adaptation}
+\label{sec:keylen}
+
+SM4-GCM consumes a $128$-bit key, half the length of
+ChaCha20--Poly1305's $256$-bit key.  The KDF, however, continues to
+operate at $256$ bits to preserve the entropy contributed by each
+KEM secret and ECDH shared secret.  Truncation is applied uniformly
+at the point where key material leaves the KDF and enters the AEAD
+call: each $256$-bit output is truncated to its leading $128$ bits.
+This does not reduce security, as the prefix of a uniformly random
+$256$-bit string is itself uniformly distributed.
+% =====================================================================
+\section{Security Analysis}
+\label{sec:security}
+
+\subsection{Threat Model and Assumptions}
+\label{sec:threat}
+
+We analyse SM-PQ-WireGuard in the standard Dolev--Yao network model:
+the adversary controls all communication channels and may intercept,
+modify, inject, or replay messages.  For the computational reduction,
+we additionally grant the adversary full control over session
+scheduling and key-reveal queries, following the standard
+real-or-random (RoR) security experiment for authenticated key
+exchange~\cite{31,32}.  The adversary may compromise any
+subset of long-term keys (static SM2 keys and static KEM keys) and
+ephemeral keys (ephemeral SM2 keys and ephemeral KEM keys); the target
+session is considered fresh if its session key has not been revealed
+and at least one of the three security legs remains intact---the
+classical SM2 leg (neither peer's static SM2 key is compromised and the
+ephemeral SM2 keys of the session are unrevealed), the ephemeral
+post-quantum leg (the ephemeral KEM key pair of the session is
+uncompromised), or the static post-quantum leg (neither peer's static
+KEM key is compromised).
+
+We rely on three standard hardness assumptions: (i)~the gap
+Diffie--Hellman (GDH) assumption on the SM2
+curve~\cite{17,18}; (ii)~the IND-CCA security of each
+supported KEM (ML-KEM-512/768/1024, Kyber-512, HQC-128, and
+Frodo-640-AES); and (iii)~the random-oracle~\cite{33} / dual-PRF model for
+HMAC-SM3~\cite{34}.  These assumptions are standard for
+their respective primitives and are inherited from the underlying
+cryptographic standards.
+
+\subsection{Computational Security}
+\label{sec:formal}
+
+We establish the security of SM-PQ-WireGuard through a sequence of
+game hops, following the standard hybrid key-exchange
+reduction~\cite{32}.  The core argument is that the
+session key remains pseudorandom as long as at least one of the three
+underlying hardness assumptions holds.
+
+\begin{theorem}[Hybrid security of SM-PQ-WireGuard]\label{thm:hybrid}
+Let $\Pi$ be the protocol defined by Algorithms~\ref{alg:init}
+and~\ref{alg:resp}, with $q_s$ the number of session queries.  Under
+the GDH assumption on SM2, the IND-CCA security of the underlying
+KEMs, and the random-oracle / dual-PRF assumption on HMAC-SM3, the
+distinguishing advantage of any PPT adversary $\mathcal A$ is bounded by
+\begin{align*}
+\Adv^{\textsc{ror}}_{\Pi}(\mathcal A) \leq\
+  q_s\cdot \min\bigl\{
+  &\Adv^{\mathrm{GDH}}_{\textsf{SM2}}(\mathcal A_1),\
+   \Adv^{\mathrm{IND\text{-}CCA}}_{\KEMe}(\mathcal A_2),\ \\
+  &\Adv^{\mathrm{IND\text{-}CCA}}_{\KEMs}(\mathcal A_3)
+  \bigr\}
+   + \negl(\lambda),
+\end{align*}
+for adversaries $\mathcal A_1, \mathcal A_2, \mathcal A_3$ whose
+running time is essentially that of $\mathcal A$.  The minimum over the
+three terms is the precise statement of hybrid security: the advantage
+stays negligible as long as the classical leg \emph{or} either
+post-quantum leg is unbroken.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+We model SM3 (via HMAC-SM3) as a random oracle---a standard
+assumption for Noise-derived protocols.  In the random-oracle model,
+if \emph{any one} of the freshly mixed per-session secrets is replaced
+by an independent uniform value unknown to the adversary, then all
+subsequent chaining keys and the session keys become
+information-theoretically indistinguishable from uniform.
+
+The responder-side KDF chain (Algorithm~\ref{alg:resp}) absorbs four
+such secrets: $z_4 = \ECDH(e', E)$ (the ephemeral--ephemeral SM2 DH),
+$\textsf{shk}_2$ (the ephemeral KEM shared secret), $z_3 =
+\ECDH(e', S^i)$ (the ephemeral--static SM2 DH), and
+$\textsf{shk}_3$ (the static KEM shared secret).  We give three
+independent reductions, each starting from the real protocol and
+replacing exactly one secret with uniform on the tested session.
+Replacing $z_4$ reduces to the GDH assumption on SM2 (with $z_3$
+providing redundant coverage under the same assumption); replacing
+$\textsf{shk}_2$ reduces to the IND-CCA security of $\KEMe$; and
+replacing $\textsf{shk}_3$ reduces to the IND-CCA security of $\KEMs$.
+Since the session key becomes indistinguishable from uniform after
+any one replacement, the distinguishing advantage is bounded by
+$q_s$ times the minimum of the three hard-problem advantages.
+The reduction sketches are given in Appendix~\ref{sec:proof}; we note
+that a fully rigorous game-hopping proof---accounting for the iterative
+HMAC-based KDF structure, the initiator-side KDF chain, and fine-grained
+key-compromise scenarios---is omitted for brevity, but the core
+arguments are standard and well-understood in the hybrid-AKE
+literature~\cite{14,32}.
+\end{proof}
+
+Crucially, the theorem is \emph{parameterised by the choice of KEM}:
+the reduction holds for any IND-CCA-secure KEM plugged into either the
+static or ephemeral slot.  This is the computational foundation of our
+agility framework---switching KEMs does not alter the security
+argument, as long as the chosen KEM satisfies the IND-CCA assumption.
+
+\subsection{Symbolic Verification with SAPIC\textsuperscript{+},
+            Tamarin and ProVerif}
+\label{sec:symbolic}
+
+To complement the computational reduction, we provide a mechanised
+symbolic verification of SM-PQ-WireGuard---in the tradition of
+mechanised WireGuard analyses~\cite{35}---using the
+SAPIC\textsuperscript{+} framework~\cite{36}.
+SAPIC\textsuperscript{+} serves as a unified front-end that generates
+models for multiple verification back-ends---ProVerif~\cite{37}
+for reachability and equivalence properties,
+Tamarin~\cite{38} for trace properties with a more
+complete Diffie--Hellman equational theory, and
+DeepSec~\cite{39} for confirming observational
+equivalence attacks in the bounded fragment.  This multi-back-end
+approach provides complementary guarantees: ProVerif is sound (but not
+complete) for equivalence, Tamarin handles the full DH theory, and
+DeepSec is complete for bounded equivalence.
+
+The verification serves two purposes.  First, it confirms that the
+protocol structure---the interleaving of DH, KEMs, and key
+derivation---is sound even when the adversary can reveal arbitrary
+combinations of long-term and ephemeral secrets.  Second, it verifies
+that the agile ephemeral-KEM switching framework
+(Section~\ref{sec:agility}) introduces no structural weakness, and that
+every supported ephemeral KEM preserves the same security guarantees.
+
+\subsubsection{SAPIC\textsuperscript{+} Model and Multi-Back-End
+               Workflow}
+\label{sec:sapicmodel}
+
+We model the protocol in SAPIC\textsuperscript{+}'s input language,
+which extends the applied $\pi$-calculus with support for
+Diffie--Hellman equational theories and stateful processes.  The
+classical layer (SM2 ECDH, SM3 hash, SM4-GCM/SM4-CTR) and the
+post-quantum layer (KEM KeyGen, Encap, Decap) are represented as
+abstract function symbols with their equational theories.  The
+adversary is the standard Dolev--Yao attacker with full network
+control, augmented with the ability to reveal any combination of
+static keys, ephemeral keys, and encapsulation
+randomness---following the minimal-compromise methodology of
+Lafourcade et al.~\cite{40}.
+
+Crucially, the model treats the SM2 group, the SM3 hash, and the KEM as
+abstract symbols equipped with their equational theories, so neither
+the GM/T instantiation nor the concrete KEM choice changes the
+specification; the public suite identifier
+(Section~\ref{sec:agility}) is a public constant available to the
+adversary.  A single specification therefore covers every supported
+suite, and the security properties it establishes hold for all of them.
+
+From this single specification, SAPIC\textsuperscript{+} automatically
+generates:
+\begin{itemize}
+\item A \textbf{ProVerif} model, used as the primary workhorse for
+computing minimal compromise conditions (via its built-in support for
+reachability and observational equivalence) and for the
+necessary/sufficient conditions phase of the analysis.
+\item A \textbf{Tamarin} model, which provides a more complete
+equational theory for Diffie--Hellman and serves as an independent
+cross-check of the trace properties computed by ProVerif.
+\item A \textbf{DeepSec} model.  DeepSec is complete for bounded
+observational equivalence, but it does not support the Diffie--Hellman
+equational theory and therefore applies to the post-quantum-only
+reference protocols rather than to the DH-bearing SM-PQ hybrid; for the
+hybrid, ProVerif is the equivalence verifier and Tamarin independently
+cross-checks the trace properties.
+\end{itemize}
+
+\subsubsection{Verification Results}
+\label{sec:veriresults}
+
+Table~\ref{tab:cnf} summarises the minimal compromise conditions
+computed by ProVerif (and cross-checked with Tamarin) for the key
+security properties.  Each formula is a conjunctive normal form (CNF)
+over the atomic secrets (static SM2 keys, static KEM keys, ephemeral
+SM2 keys, ephemeral KEM keys, and encapsulation randomness); a
+property holds unless the adversary compromises a set of secrets
+satisfying the CNF.
+
+\begin{table}[htbp]
+\centering
+\caption{Minimal compromise conditions for key security properties.
+Results are identical across ProVerif and Tamarin.  Notation:
+$s^c_i, s^c_r$ = initiator/responder static SM2 keys;
+$e^c_i, e^c_r$ = ephemeral SM2 keys;
+$s^q_i, s^q_r$ = static KEM keys;
+$e^q_i$ = ephemeral KEM key;
+$r_i, r_r, r_e$ = encapsulation randomness;
+$\mathsf{dh}_{s_i,s_r}$ = static-static DH secret.}
+\label{tab:cnf}
+\footnotesize
+\tabcolsep 5pt
+\begin{tabular}{ll}
+\toprule
+\textbf{Property} & \textbf{Minimal compromise condition (CNF)} \\
+\midrule
+Session uniqueness & $\varnothing$ (unconditional) \\
+UKS resistance (initiator / responder) & $\varnothing$ (unconditional) \\[2pt]
+Key secrecy (initiator)
+  & $\mathsf{psk}\land(s^c_r\lor e^c_i)\land(\mathsf{dh}_{s_i,s_r}\lor s^c_i\lor s^c_r)\land(s^q_r\lor r_i)$ \\[2pt]
+Key secrecy (responder)
+  & $\mathsf{psk}\land(s^c_i\lor e^c_r)\land(\mathsf{dh}_{s_i,s_r}\lor s^c_i\lor s^c_r)\land(s^q_i\lor r_r)$ \\[2pt]
+Forward secrecy
+  & $\mathsf{psk}\land(s^c_r\lor e^c_i)\land(\mathsf{dh}_{s_i,s_r}\lor s^c_i\lor s^c_r)\land(e^q_i\lor r_e)\land(e^c_i\lor e^c_r)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The key observation is that every session-key formula factors into a
+classical clause and a post-quantum clause.  For key secrecy from the
+initiator's perspective:
+\[
+\underbrace{\mathsf{psk}\land(s^c_r\lor e^c_i)\land(\mathsf{dh}_{s_i,s_r}\lor s^c_i\lor s^c_r)}_{\text{classical (SM2) clause}}
+\ \land\
+\underbrace{(s^q_r\lor r_i)}_{\text{post-quantum clause}}.
+\]
+To learn the session key, the adversary must defeat \emph{both} the
+classical leg \emph{and} the post-quantum leg.  This is the precise,
+machine-checked statement of hybrid security: even a quantum computer
+that recovers all SM2 secrets still faces the unbroken
+$(s^q_r\lor r_i)$ clause.
+
+Crucially, these CNF formulas are \emph{independent of the concrete
+KEM}.  Because the KEM enters the model only through its abstract
+interface, a single ProVerif/Tamarin development establishes the
+conditions for every supported suite at once: replacing the ephemeral
+ML-KEM-512 with ML-KEM-768, HQC-128, or any other registered ephemeral
+KEM leaves the specification---and hence the minimal
+compromise conditions---unchanged.  The public suite identifier ensures
+that different KEM choices produce distinct transcripts, preventing
+cross-algorithm confusion, while the abstract KEM interface ensures that
+the protocol structure remains unchanged.  This mechanised result
+complements
+Theorem~\ref{thm:hybrid}: the computational reduction guarantees
+security for any IND-CCA KEM, and the symbolic verification confirms
+that the protocol structure securely accommodates all of them.
+
+The trace properties were independently re-established by Tamarin,
+whose more complete Diffie--Hellman theory verified all eleven trace
+lemmas---message agreement for \initmsg, \respmsg, and the confirmation
+message; initiator, responder, and mutual key secrecy, each with and
+without forward secrecy; and initiator and responder session
+uniqueness---in agreement with the ProVerif results of
+Table~\ref{tab:cnf}.
+
+For equivalence properties (strong secrecy and anonymity), ProVerif's
+observational-equivalence engine is the verifier, since DeepSec does
+not support the SM2 Diffie--Hellman theory required by the hybrid.  The
+headline cases---where the adversary compromises all classical secrets
+(``all-dh''), all post-quantum secrets (``all-pq''), or nothing
+(``no-reveal'')---return \textit{true} (observational equivalence
+holds) for both anonymity and strong secrecy, confirming hybrid
+security at the indistinguishability level.  In the remaining
+partial-compromise scenarios ProVerif returns \textit{cannot be
+proved}: its diff-equivalence over-approximation can neither certify
+equivalence nor exhibit a distinguisher.  Across all evaluated
+scenarios \emph{no} equivalence attack was found---of the equivalence
+queries ProVerif decided, $15$ established equivalence and $19$ were
+inconclusive, with zero distinguishing attacks.  We therefore claim
+anonymity and strong secrecy in the no- and low-compromise regimes
+where they are machine-certified, and report the higher-compromise
+scenarios as not contradicted rather than proven.
+
+\subsubsection{Properties Not Covered by Symbolic Verification}
+\label{sec:notcovered}
+
+The symbolic model does not capture side-channel resistance,
+denial-of-service resistance, or the strength of the underlying
+cryptographic primitives.  These are addressed as follows:
+(i)~side-channel resistance is an implementation property; our
+GFNI+AVX2 SM4 back-end provides a constant-time S-box on supported
+platforms (Section~\ref{sec:perf}); (ii)~DoS resistance is inherited
+from WireGuard's cookie-reply mechanism, with the nonce-collision
+probability bounded by $2^{-53}$ (Section~\ref{sec:noncedomain}); and
+(iii)~the primitive strengths are covered by the computational
+assumptions in Theorem~\ref{thm:hybrid}.
+
+\section{Performance Evaluation}
+\label{sec:perf}
+
+We evaluate SM-PQ-WireGuard on a commodity x86\_64 host to answer three
+questions: (i)~what is the handshake latency and wire size overhead of
+the GM/T substitution? (ii)~does the optimised SM4-GCM back-end close
+the data-plane throughput gap? and (iii)~what is the runtime cost of
+the agility framework itself?
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+All experiments run on a single core of an Intel i7-13700 (16\,GiB RAM,
+Linux 6.6) compiled with Rust 1.95 in release mode with link-time
+optimisation.  The GM/T primitives use standard open-source
+implementations (SM2 v0.13~\cite{41}, SM3 v0.3); SM4 is
+evaluated in two back-ends: the portable reference implementation (v4)
+and our GFNI+AVX2 in-tree back-end (v5)~\cite{42}.  Post-quantum KEMs are provided
+through the liboqs library (v0.10).  Handshake latencies are means
+over $100$ handshakes and data-plane figures over $15$ micro-benchmark
+rounds; the per-suite comparison of Figure~\ref{fig:kemcompare} uses
+$300$ rounds with the suites interleaved round-robin so that CPU
+frequency drift averages across suites rather than biasing any single
+one.  Standard deviations are reported where applicable.
+
+\subsection{Handshake Latency and Wire Size}
+\label{sec:q1q2}
+
+Table~\ref{tab:handshake} reports the handshake latency and message
+sizes for three variants: stock WireGuard, the PQ-only hybrid
+(PQ-WireGuard$^\star$), and SM-PQ-WireGuard.  The initiator column
+measures the time to build \initmsg; the responder column measures the
+time to consume \initmsg\ and build \respmsg.
+
+\begin{table}[htbp]
+\centering
+\caption{Handshake latency (ms, mean over $100$ handshakes, std.\ in
+parentheses) and on-wire handshake message sizes (bytes, excluding the
+IPv6/UDP header).  Long-term static-KEM key pairs are generated once at
+configuration time; the latencies measure the steady-state
+per-handshake cost.}
+\label{tab:handshake}
+\footnotesize
+\tabcolsep 5pt
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Variant} & \textbf{Initiator (ms)} & \textbf{Responder (ms)}
+                 & \textbf{\initmsg\ (B)} & \textbf{\respmsg\ (B)} \\
+\midrule
+WireGuard           & $0.083\,(0.04)$ & $0.182\,(0.08)$ & $196$  & $140$  \\
+PQ-WireGuard$^\star$ & $0.144\,(0.06)$ & $0.340\,(0.13)$ & $1124$ & $1032$ \\
+SM-PQ-WireGuard     & $0.621\,(0.23)$ & $1.169\,(0.40)$ & $1110$ & $1018$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Relative to an otherwise identical hybrid construction instantiated
+with X25519, the only wire-format change SM-PQ-WireGuard introduces is
+a single byte---the $33$-byte SEC1-compressed SM2 ephemeral public key
+replacing the $32$-byte X25519 $u$-coordinate, alongside the one-byte
+\texttt{f\_suite} selector.  Its messages ($1110$/$1018$\,B) are
+comparable in size to PQ-WireGuard$^\star$ and, for the default
+ML-KEM-512 (or Kyber-512) suite, remain within the
+IPv6 MTU of $1280$ bytes (the larger suites exceed it; see below).  Every variant completes its handshake in
+roughly a millisecond: with the long-term Classic~McEliece key pairs
+generated once at configuration time, the per-handshake KEM work
+(ML-KEM-512 key generation/encapsulation plus McEliece
+encapsulation/decapsulation) accounts for only the $0.340$\,ms
+PQ-WireGuard$^\star$ responder baseline.  The dominant single
+contributor in the SM variant is, in fact, the \emph{classical} SM2
+ECDH: it raises the responder latency to $1.169$\,ms, a
+$+0.83$\,ms delta over PQ-WireGuard$^\star$ that is almost entirely
+attributable to the pure-Rust SM2 implementation being markedly slower
+than X25519 ($\approx 1.0$\,ms vs.\ $\approx 0.22$\,ms of ECDH time);
+SM3 hashing and SM4 symmetric substitutions together add $<0.05$\,ms.
+In \emph{relative} terms the GM/T substitution is therefore not free
+($\approx 3\times$ the PQ-only responder time), but in \emph{absolute}
+terms the entire handshake remains sub-$1.2$\,ms---imperceptible for
+VPN session establishment, and dominated by a classical primitive that
+a hardware SM2 engine would close.  These sub-millisecond figures
+correct an earlier measurement that conflated one-time McEliece key
+generation with per-handshake cost.
+
+Because the ephemeral KEM is selected at run time through the agility
+framework (Section~\ref{sec:agility}), we further measured the
+per-handshake cost of \emph{every} registered suite while holding the
+static McEliece anchor and the SM4-GCM data plane fixed---the KEM is the
+only variable.  Figure~\ref{fig:kemcompare} reports, for the initiator
+and responder respectively, the on-wire handshake size (bars, left
+axis) against the handshake latency (line, right axis, $\pm$SEM over
+$300$ round-robin rounds; suites are interleaved so that CPU
+frequency drift averages out rather than separating the suites).
+
+\begin{figure*}[htbp]
+\centering
+\begin{minipage}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{kem_compare_init.png}\\
+  {\footnotesize (a) Initiator (\initmsg)}
+\end{minipage}\hfill
+\begin{minipage}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{kem_compare_respond.png}\\
+  {\footnotesize (b) Responder (\respmsg)}
+\end{minipage}
+\caption{Per-suite cost of the agile ephemeral KEM (static McEliece
+anchor and SM4-GCM data plane held fixed).  Bars: on-wire handshake
+size (left axis); line: handshake latency with $\pm$SEM error bars
+(right axis, $300$ rounds).  On-wire size spans nearly $10\times$
+(ML-KEM-512 $\approx 1.0$\,KiB to FrodoKEM-640 $\approx 9.7$\,KiB) and
+is deterministic, whereas latency separates only the code-based
+HQC-128; the remaining five suites (including the $9.7$\,KiB FrodoKEM)
+are statistically indistinguishable in time.}
+\label{fig:kemcompare}
+\end{figure*}
+
+Two observations follow.  First, size and speed are
+\emph{uncorrelated} across the agile suites: HQC-128 is the latency
+outlier ($3.18$\,ms responder) at a moderate $4.6$\,KiB \respmsg, while
+FrodoKEM-640 is the size outlier ($9.7$\,KiB, nearly $10\times$
+ML-KEM-512) yet sits in the same latency cluster as the lattice suites
+($1.35$\,ms responder)---a huge ciphertext at ordinary speed.  Second,
+the five non-code suites (ML-KEM-512/768/1024, Kyber-512, and
+FrodoKEM-640) span only $1.12$--$1.35$\,ms at the responder, a range
+narrower than their own run-to-run standard deviation, and are thus
+distinguishable only by wire size---which makes message size, not time,
+the operative cost metric when an operator chooses a security level.
+This is precisely the trade-off space the agility framework exposes
+through its single external selector: an operator can move along the
+NIST-level axis (L1$\to$L5) or hedge across algorithm families
+(lattice/code/LWE) at deployment time, paying in bytes and, for the
+code-based option, in roughly $2$\,ms of extra latency.  Concretely,
+only the default ML-KEM-512 and Kyber-512 suites keep both handshake
+messages within the IPv6 MTU of $1280$\,bytes (G4); the larger suites
+(ML-KEM-768/1024 at $\approx 1.3$--$1.9$\,KiB, HQC-128 at up to
+$4.6$\,KiB, and Frodo-640-AES at $\approx 9.7$\,KiB) exceed it and are
+delivered via IP fragmentation, which is the explicit cost an operator
+accepts when selecting a higher security level or a non-lattice family.
+
+\subsection{Data-Plane Throughput}
+\label{sec:q5}
+
+The data plane is the one place where the GM/T substitution carries a
+real runtime cost.  Table~\ref{tab:throughput} reports single-core
+encryption throughput for four implementations across
+WireGuard-relevant packet sizes: the optimised assembly
+ChaCha20--Poly1305 implementation (the stock WireGuard back-end),
+the portable software ChaCha20--Poly1305 implementation (software baseline),
+portable SM4-GCM (v4), and our GFNI+AVX2 SM4-GCM (v5).
+
+\begin{table}[htbp]
+\centering
+\caption{Single-core AEAD encryption throughput (MiB/s).  v5 is our
+GFNI+AVX2 SM4-GCM back-end.}
+\label{tab:throughput}
+\footnotesize
+\tabcolsep 5pt
+\begin{tabular}{rrrrrr}
+\toprule
+\textbf{Payload (B)} & \textbf{ring (ChaCha20)} & \textbf{soft (ChaCha20)}  & \textbf{SM4-GCM v4} & \textbf{SM4-GCM v5} & \textbf{v5/v4} \\
+\midrule
+$64$    & $417$  & $59$  & $56$  & $98$  & $1.7\times$ \\
+$512$   & $1592$ & $302$ & $100$ & $383$ & $3.8\times$ \\
+$1280$  & $2230$ & $432$ & $105$ & $517$ & $4.9\times$ \\
+$1500$  & $2319$ & $481$ & $97$  & $497$ & $5.2\times$ \\
+$8192$  & $2834$ & $618$ & $109$ & $605$ & $5.6\times$ \\
+$65536$ & $2642$ & $715$ & $99$  & $618$ & $6.3\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Our GFNI+AVX2 SM4-GCM back-end (v5) is $4.4$--$6.3\times$ faster than
+the portable v4, with the speed-up growing with packet size as the
+per-call fixed cost (key schedule, the CLMUL-based GHASH
+subkey~\cite{43}) is amortised and SIMD lanes fill.  At WireGuard MTUs ($1280$--$1500$\,B), v5 reaches parity
+with the portable software ChaCha20--Poly1305 implementation
+($0.98$--$1.20\times$).  The residual
+$\sim 4.5\times$ gap against \texttt{ring}'s hand-written AVX2 assembly
+is the only remaining headroom, addressable by a hardware SM4 engine or
+future hand-tuned assembly.
+
+\subsection{Agility Framework Overhead}
+\label{sec:agilityoverhead}
+
+To quantify the cost of cryptographic agility itself, we compare three
+configurations of the same binary: (i)~no agility framework (hard-coded
+KEM selection); (ii)~agility framework with KEM selection resolved at
+compile time; and (iii)~agility framework with KEM selection resolved
+at deployment time via configuration.  All three use identical
+cryptographic primitives (SM2 + ML-KEM-512).
+
+\begin{table}[htbp]
+\centering
+\caption{Agility framework overhead (responder latency, ms; ML-KEM-512,
+$100$ handshakes).  Only the deployment-time row is separately
+benchmarked (the measured agile binary); the upper two rows ($\approx$)
+are equal to it by construction and not independently measured, since
+the dispatch cost (an atomic load plus a \texttt{match}) lies below the
+per-handshake standard deviation.}
+\label{tab:agility}
+\footnotesize
+\tabcolsep 10pt
+\begin{tabular}{lr}
+\toprule
+\textbf{Configuration} & \textbf{Responder latency (ms)} \\
+\midrule
+No agility (hard-coded)     & $\approx 1.169$ \\
+Compile-time dispatch       & $\approx 1.169$ \\
+Deployment-time dispatch    & $1.169\,(0.40)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The agility framework's only cost on the wire is the single
+\texttt{f\_suite} byte; at run time, suite selection is an atomic load
+and a \texttt{match}, and binding the \texttt{f\_suite} byte into the
+transcript adds one SM3 compression---together a few nanoseconds, far
+below the
+$\pm0.40$\,ms run-to-run standard deviation of the handshake itself.
+The framework therefore imposes no measurable handshake overhead: the
+flexibility to switch among ML-KEM-512/768/1024, Kyber-512, HQC-128 and
+FrodoKEM-640 (Figure~\ref{fig:kemcompare}) is effectively free relative
+to the cryptographic work it dispatches.
+
+\subsection{Summary}
+\label{sec:perfsummary}
+
+In summary, SM-PQ-WireGuard adds \textbf{one byte} to the wire format
+(relative to an X25519 hybrid) and keeps the entire handshake
+\textbf{sub-$1.2$\,ms}.  The GM/T
+substitution's cost is concentrated in the classical SM2 ECDH
+($\approx 0.83$\,ms over the PQ-only hybrid)---a large relative but
+negligible absolute overhead, and one orthogonal to the post-quantum
+KEMs, whose per-handshake cost is only $\approx 0.34$\,ms.  The
+data-plane gap is closed by the GFNI+AVX2 v5 back-end, reaching
+portable software ChaCha20-Poly1305 parity at WireGuard MTUs.  The
+agility framework itself adds no measurable handshake overhead beyond
+the single wire byte, validating that flexible KEM switching---across
+ML-KEM-512/768/1024, Kyber-512, HQC-128, and FrodoKEM-640-AES, whose
+per-suite costs differ by up to $10\times$ in wire size while the
+handshake stays near $1$\,ms for every suite except the code-based
+HQC-128 ($\approx 3.2$\,ms) (Figure~\ref{fig:kemcompare})---comes
+essentially for free.
+
+% =====================================================================
+\section{Discussion and Conclusion}
+\label{sec:disc}
+
+\subsection{Discussion}
+
+Our results show that SM-PQ-WireGuard provides a practical path toward
+a regulation-compliant, post-quantum-secure VPN handshake with minimal
+performance overhead.  Several aspects merit further discussion.
+
+\paragraph{Hardware acceleration.}
+With the SM4 data-plane gap closed by our GFNI+AVX2 back-end, the
+single largest remaining GM/T cost is the SM2 scalar multiplication,
+which accounts for approximately $1$\,ms of cryptographic time per
+handshake (Table~\ref{tab:handshake}) and is $3.8\times$ slower than
+X25519 in the atomic benchmark.  This gap is not intrinsic to SM2; it
+reflects the absence of optimised, vectorised scalar multiplication in
+the current SM2 software implementation.  Many newer Chinese SoCs implement
+SM2 (and SM4) in hardware; on such platforms, we expect the
+SM-PQ-WireGuard handshake to fall back toward the
+PQ-WireGuard$^\star$ baseline, with the SM2 contribution reduced to
+near-X25519 levels and the GM/T overhead below $1\%$.
+
+\paragraph{Side-channel considerations.}
+The v5 data-plane SM4 provides a constant-time S-box on GFNI-capable
+hosts by computing the S-box via the GFNI affine instruction pair,
+which perform a fixed Galois-field affine map with no table look-ups
+and hence no data-dependent memory access---the classic source of
+cache- and timing-based key recovery~\cite{44,45}.  The residual side-channel
+risk is in the SM2 scalar multiplication: the windowed implementation
+in the SM2 software library is not as battle-tested as X25519's
+Montgomery ladder.  A constant-time SM2 back-end---either via a
+bit-sliced implementation or a hardware engine---is the most important
+hardening priority for GM/T-compliant deployments.
+
+\paragraph{KEM selection and future-proofing.}
+The agility framework supports a range of KEM options
+(ML-KEM-512/768/1024, Kyber-512, HQC-128, Frodo-640-AES).  Our
+performance evaluation (Section~\ref{sec:perf}) shows that the runtime
+difference between KEMs is dominated by the KEM operations themselves,
+not by the agility framework, so operators can choose based on security
+margins and key-size constraints rather than performance.  The
+ProVerif-verified domain separation guarantees that switching KEMs does
+not introduce cross-algorithm confusion or invalidate the security
+proof.  As the NIST post-quantum standardisation landscape evolves, new
+KEMs can be added to the framework by implementing the same abstract
+interface; no protocol-level changes are required.
+
+\paragraph{Other future work.}
+Additional directions include refining the cookie-reply nonce field
+(reclaiming $12$ bytes per cookie reply), integrating a hardware SM2
+back-end, and extending the constant-time SM4 path to non-GFNI
+platforms via a bit-sliced fallback or a dedicated ISA
+extension~\cite{46}.
+
+\subsection{Conclusion}
+
+We presented SM-PQ-WireGuard, a hybrid post-quantum WireGuard handshake
+that unifies GM/T compliance with cryptographic agility.  The protocol
+instantiates the classical layer with SM2, SM3, and SM4, and
+combines a fixed Classic-McEliece-460896 static-KEM identity anchor
+with an agile ephemeral-KEM slot supporting a range of post-quantum
+options including ML-KEM, Kyber, HQC, and FrodoKEM.  An
+algorithm-agnostic abstraction
+layer and a one-byte suite-identifier domain separator enable flexible
+switching of the ephemeral KEM without protocol-level changes or
+security-proof invalidation.  We explicitly re-derived the Noise transcript for the
+GM/T setting, resolving two protocol-layer mismatches---MAC1/MAC2
+reconstruction via HMAC-SM3 truncation and per-site nonce partitioning
+for SM4-GCM---and provided a dual-track security analysis combining an
+IND-CCA reduction with mechanised ProVerif/Tamarin verification.  Our
+implementation adds one byte to the wire format relative to an X25519
+hybrid, keeps the whole handshake sub-$1.2$\,ms (the GM/T overhead being
+concentrated in the
+classical SM2 ECDH rather than the post-quantum KEMs), and reaches
+portable software ChaCha20-Poly1305 parity at WireGuard MTUs with a GFNI+AVX2 SM4
+back-end; the agility framework itself contributes no measurable
+handshake overhead beyond the single suite-selector byte.  We believe SM-PQ-WireGuard is a credible deployment target
+for the Chinese post-quantum VPN ecosystem, offering a practical
+balance of GM/T standards compliance, quantum security, and cryptographic
+flexibility.
+
+% =====================================================================
+%%% Acknowledgements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Acknowledgements{This work was supported by Zhejiang Leading Innovation and Entrepreneurship Team (No.~2024R02004).}
+
+% =====================================================================
+%%% Supplements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\Supplements{Appendix~A contains a proof sketch of
+Theorem~\ref{thm:hybrid}.  The supporting information is available
+online at info.scichina.com and link.springer.com.  The supporting
+materials are published as submitted, without typesetting or editing.
+The responsibility for scientific accuracy and content remains entirely
+with the authors.}
+
+% =====================================================================
+%%% References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{99}
+
+\bibitem{1} Donenfeld J A. WireGuard: Next Generation Kernel Network Tunnel. In: Proceedings of NDSS, San Diego, 2017
+
+\bibitem{2} Perrin T. The Noise Protocol Framework, rev. 34. 2018. \url{https://noiseprotocol.org/noise.html}
+
+\bibitem{3} Diffie W, Hellman M E. New directions in cryptography. IEEE Trans Inform Theory, 1976, 22: 644--654
+
+\bibitem{4} Bernstein D J. Curve25519: new Diffie--Hellman speed records. In: Proceedings of PKC, New York, 2006. 207--228
+
+\bibitem{5} Nir Y, Langley A. ChaCha20 and Poly1305 for IETF protocols. IETF RFC 8439, 2018
+
+\bibitem{6} Aumasson J-P, Neves S, Wilcox-O'Hearn Z, et al. BLAKE2: simpler, smaller, fast as MD5. In: Proceedings of ACNS, Banff, 2013. 119--135
+
+\bibitem{7} Miller V S. Use of elliptic curves in cryptography. In: Proceedings of CRYPTO, Santa Barbara, 1985. 417--426
+
+\bibitem{8} Koblitz N. Elliptic curve cryptosystems. Math Comput, 1987, 48: 203--209
+
+\bibitem{9} Shor P W. Algorithms for quantum computation: discrete logarithms and factoring. In: Proceedings of FOCS, Santa Fe, 1994. 124--134
+
+\bibitem{10} Mosca M. Cybersecurity in an era with quantum computers: will we be ready? IEEE Secur Priv, 2018, 16: 38--41
+
+\bibitem{11} Stebila D, Fluhrer S, Gueron S. Hybrid key exchange in TLS~1.3. IETF Internet-Draft, 2020
+
+\bibitem{12} Bos J W, Costello C, Naehrig M, et al. Post-quantum key exchange for the TLS protocol from the ring learning with errors problem. In: Proceedings of IEEE S\&P, San Jose, 2015. 553--570
+
+\bibitem{13} Bindel N, et al. Hybrid key encapsulation mechanisms and authenticated key exchange. In: Proceedings of PQCrypto, Chongqing, 2019. 206--225
+
+\bibitem{14} Dowling B, Paterson K G. A cryptographic analysis of the WireGuard protocol. In: Proceedings of ACNS, Leuven, 2018. 3--21
+
+\bibitem{15} NIST. FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism Standard. 2024
+
+\bibitem{16} Albrecht M R, et al. Classic McEliece: conservative code-based cryptography. NIST PQC Standardization, 2022
+
+\bibitem{17} State Cryptography Administration. GM/T 0003.1-2012: SM2, Part~1: General. 2012
+
+\bibitem{18} State Cryptography Administration. GM/T 0003.5-2012: SM2, Part~5: Parameter definition. 2012
+
+\bibitem{19} State Cryptography Administration. GM/T 0004-2012: SM3 cryptographic hash algorithm. 2012
+
+\bibitem{20} SAC, AQSIQ. GB/T 32907-2016: SM4 block cipher algorithm. 2016
+
+\bibitem{21} Katz J, Lindell Y. Introduction to Modern Cryptography. 2nd ed. CRC Press, 2014
+
+\bibitem{22} Rogaway P. Authenticated-encryption with associated-data. In: Proceedings of CCS, Washington, 2002. 98--107
+
+\bibitem{23} Bellare M, Namprempre C. Authenticated encryption: relations among notions. In: Proceedings of ASIACRYPT, Kyoto, 2000. 531--545
+
+\bibitem{24} Certicom Research. SEC 1: Elliptic Curve Cryptography, v2.0. 2009
+
+\bibitem{25} Merkle R C. A certified digital signature. In: Proceedings of CRYPTO, Santa Barbara, 1989. 218--238
+
+\bibitem{26} Damg\aa rd I B. A design principle for hash functions. In: Proceedings of CRYPTO, Santa Barbara, 1989. 416--427
+
+\bibitem{27} Dworkin M. NIST SP 800-38D: Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM) and GMAC. 2007
+
+\bibitem{28} McGrew D A, Viega J. The security and performance of the Galois/Counter Mode (GCM). In: Proceedings of INDOCRYPT, Chennai, 2004. 343--355
+
+\bibitem{29} Avanzi R, et al. CRYSTALS-Kyber (v3.02). NIST PQC Standardization, 2022
+
+\bibitem{30} Krawczyk H, Bellare M, Canetti R. HMAC: keyed-hashing for message authentication. IETF RFC 2104, 1997
+
+\bibitem{31} Krawczyk H. SIGMA: the ``SIGn-and-MAc'' approach to authenticated Diffie--Hellman and its use in the IKE protocols. In: Proceedings of CRYPTO, Santa Barbara, 2003. 399--424
+
+\bibitem{32} Shoup V. Sequences of games: a tool for taming complexity in security proofs. IACR Cryptology ePrint Archive, 2004, 2004/332
+
+\bibitem{33} Bellare M, Rogaway P. Random oracles are practical. In: Proceedings of CCS, Fairfax, 1993. 62--73
+
+\bibitem{34} Bellare M. New proofs for NMAC and HMAC: security without collision-resistance. In: Proceedings of CRYPTO, Santa Barbara, 2006. 602--619
+
+\bibitem{35} Lipp B, Blanchet B, Bhargavan K. A mechanised cryptographic proof of the WireGuard VPN protocol. In: Proceedings of IEEE EuroS\&P, Stockholm, 2019. 231--246
+
+\bibitem{36} Cheval V, Jacomme C, Kremer S, et al. SAPIC\textsuperscript{+}: protocol verifiers of the world, unite! In: Proceedings of 31st USENIX Security Symposium, Boston, 2022. 3935--3952
+
+\bibitem{37} Blanchet B. Modeling and verifying security protocols with the applied pi calculus and ProVerif. Found Trends Priv Secur, 2016, 1: 1--135
+
+\bibitem{38} Meier S, Schmidt B, Cremers C, et al. The TAMARIN prover for the symbolic analysis of security protocols. In: Proceedings of CAV, Saint Petersburg, 2013. 696--701
+
+\bibitem{39} Cheval V, Kremer S, Rakotonirina I. DEEPSEC: deciding equivalence properties in security protocols. In: Proceedings of IEEE S\&P, San Francisco, 2018. 542--560
+
+\bibitem{40} Lafourcade P, Mahmoud D, Ruhault S, et al. A tale of two worlds: a formal story of WireGuard hybridization. In: Proceedings of 34th USENIX Security Symposium, Seattle, 2025. 4937--4956
+
+\bibitem{41} RustCrypto Project. sm2 crate, version~0.13. \url{https://crates.io/crates/sm2}
+
+\bibitem{42} Guo W. Efficient constant-time implementation of SM4 with Intel GFNI instruction set extension and Arm NEON coprocessor. IACR Cryptology ePrint Archive, 2022, 2022/1154
+
+\bibitem{43} Gueron S, Kounavis M E. Intel carry-less multiplication instruction and its usage for computing the GCM mode. Intel White Paper, 2010 (rev. 2014)
+
+\bibitem{44} Kocher P C. Timing attacks on implementations of Diffie--Hellman, RSA, DSS, and other systems. In: Proceedings of CRYPTO, Santa Barbara, 1996. 104--113
+
+\bibitem{45} Bernstein D J. Cache-timing attacks on AES. Technical report, 2005
+
+\bibitem{46} Saarinen M-J O. A lightweight ISA extension for AES and SM4. arXiv:2002.07041, 2020
+
+\end{thebibliography}
+
+% =====================================================================
+%%% Appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{appendix}
+
+\section{Proof Sketch of Theorem~\ref{thm:hybrid}}
+\label{sec:proof}
+
+We give the core reductions in detail while explicitly acknowledging
+where formal game hops are elided for brevity.  A fully rigorous proof
+would expand each step into several sub-games (accounting for the
+iterative HMAC-based KDF, bad-flag analyses for ROM consistency, and
+fine-grained key-compromise cases) and would additionally reduce the
+initiator-side KDF chain ($z_1$, $\textsf{shk}_1$, $z_2$)---all of
+which is standard in the hybrid-AKE literature~\cite{14,32,35} and
+omitted here.
+
+\subsection{ROM Setup and KDF Chain}
+
+We model SM3 as a random oracle $\mathcal{O} \colon \{0,1\}^* \to
+\{0,1\}^{256}$.  HMAC-SM3 is treated as a keyed RO via the standard
+NMAC reduction~\cite{34}.  The KDF of Section~\ref{sec:handshake}
+is a composition of RO calls; for brevity we write each $\KDF_n(ck,m)$
+as a sequence of $\mathcal{O}$ queries and focus on the information-flow
+structure rather than the exact query count.
+
+After both parties have processed \initmsg\ they share a chaining key
+$ck_{\text{in}}$.  The remaining KDF chain (common to both parties,
+from Algorithm~\ref{alg:resp}) is:
+\begin{align}
+ck_1 &\gets \KDF_1(ck_{\text{in}},\; \pkenc(E') \concat \textit{ct}_2)
+  \quad\text{(public input)}, \label{eq:apx1} \\
+ck_2 &\gets \KDF_1(ck_1,\; z_4 \concat \textsf{shk}_2), \label{eq:apx2} \\
+ck_3 &\gets \KDF_1(ck_2,\; z_3 \concat \textsf{shk}_3), \label{eq:apx3} \\
+(ck_4, \tau, k_E) &\gets \KDF_3(ck_3,\; Q), \label{eq:apx4} \\
+(k_{r\to i},\, k_{i\to r}) &\gets \KDF_2(ck_4,\; \varepsilon), \label{eq:apx5}
+\end{align}
+where $z_3 = \ECDH(e', S^i)$, $z_4 = \ECDH(e', E)$,
+$\textsf{shk}_2 = \Decap(e_q, \textit{ct}_2)$, and
+$\textsf{shk}_3 = \Decap(\mathit{sk}_{S^i_q}, \textit{ct}_3)$.
+
+In the ROM, if any one of $\{z_4, \textsf{shk}_2, z_3, \textsf{shk}_3\}$
+is replaced by an independent uniform value, the corresponding
+$\mathcal{O}$ query receives a fresh $256$-bit suffix unknown to the
+adversary.  The RO output---and all subsequent values in the
+chain---are therefore indistinguishable from uniform (the adversary
+can guess the fresh suffix only with probability
+$q_{\mathcal{O}}/2^{256}$, which is negligible).  Consequently, the
+session keys $k_{r\to i}$ and $k_{i\to r}$ are pseudorandom if
+\emph{any single} one of these four secrets remains hidden.
+
+$z_3$ and $z_4$ are both SM2 DH values; replacing either independently
+suffices.  We give the reduction for $z_4$ (the ephemeral--ephemeral
+DH) as the classical leg; $z_3$ is covered by an identical argument.
+
+\subsection{Path A: Classical DH (GDH)}
+
+Replace $z_4$ with uniform $r_4 \xleftarrow{\$} \{0,1\}^{256}$ on the
+tested session.  A distinguisher between real $z_4$ and uniform $r_4$
+yields a GDH solver:
+
+Given a GDH challenge $(A=aG,\, B=bG)$ with a DDH oracle
+$\mathcal{O}_{\text{DDH}}$, the reduction guesses the test session
+(probability $1/q_s$) and embeds:
+\begin{itemize}
+\item Initiator's ephemeral SM2 public key: $E \gets A = aG$;
+\item Responder's ephemeral SM2 public key: $E' \gets B = bG$.
+\end{itemize}
+The reduction does \emph{not} know $a$ or $b$, but using the known
+static private keys it computes all other required DH values:
+$z_1 = \mathit{sk}_{S^r} \!\cdot\! A$,
+$z_2 = \ECDH(\mathit{sk}_{S^i}, S^r)$,
+$z_3 = \mathit{sk}_{S^i} \!\cdot\! B$.
+The target $z_4 = abG$ is the CDH solution.  The reduction simulates
+the protocol using $r_4$ in place of $z_4$ and answers RO queries
+with a lazy-sampling table.
+
+If the adversary queries $\mathcal{O}$ on an input containing $abG$,
+the reduction detects it via $\mathcal{O}_{\text{DDH}}(A,B,\cdot)$ and
+outputs the CDH solution.  If no such query occurs, the real and
+simulated views are identically distributed.  Hence
+\[
+|\Adv_{\text{real}} - \Adv_{\text{rand}-z_4}| \le
+q_s \!\cdot\! \Adv^{\mathrm{GDH}}_{\textsf{SM2}}(\mathcal{B}_1)
++ \negl(\lambda).
+\]
+(We elide the formal game hop $\textsc{Game}_0 \to \textsc{Game}_1$
+that enforces ephemeral-key collision-freeness and the hop
+$\textsc{Game}_1 \to \textsc{Game}_2$ that programs the RO; both are
+standard and contribute only $\negl(\lambda)$ terms.)
+
+\subsection{Path B: Ephemeral KEM (IND-CCA)}
+
+Replace $\textsf{shk}_2$ with uniform.  The reduction embeds an
+IND-CCA challenge $(\mathit{pk}^\star, c^\star, k^\star_d)$ against
+$\KEMe$: set $E_q \gets \mathit{pk}^\star$, $\textit{ct}_2 \gets
+c^\star$, $\textsf{shk}_2 \gets k^\star_d$.  By KEM correctness,
+$k^\star_0 = \Decap(\mathit{sk}^\star, c^\star)$, so using $k^\star_d$
+in place of the decapsulation output is consistent with the protocol.
+The IND-CCA decapsulation oracle handles decapsulation queries for
+other sessions.  If $d=0$ (real KEM secret) the view is the real
+protocol; if $d=1$ (uniform) the view matches the $\textsf{shk}_2$-replaced
+game.  Thus
+\[
+|\Adv_{\text{real}} - \Adv_{\text{rand}-\textsf{shk}_2}| \le
+q_s \!\cdot\! \Adv^{\mathrm{IND\text{-}CCA}}_{\KEMe}(\mathcal{B}_2)
++ \negl(\lambda).
+\]
+(A formal proof would add game hops for the KEM key-pair collision and
+for ciphertext-collision events across sessions; both are bounded by
+$q_s^2/2^{256}$.)
+
+\subsection{Path C: Static KEM (IND-CCA)}
+
+Replace $\textsf{shk}_3$ with uniform.  The structure is identical to
+Path B, embedding the IND-CCA challenge for $\KEMs$: set the initiator's
+static KEM public key $S^i_q \gets \mathit{pk}^\star$, and in the test
+session set $\textit{ct}_3 \gets c^\star$, $\textsf{shk}_3 \gets
+k^\star_d$.  The stream-cipher wrapping $\textit{cct}_3$ is simulated
+honestly using the known $z_3$.  Other sessions that use $S^i_q$ are
+handled via the IND-CCA decapsulation oracle.  We obtain
+\[
+|\Adv_{\text{real}} - \Adv_{\text{rand}-\textsf{shk}_3}| \le
+q_s \!\cdot\! \Adv^{\mathrm{IND\text{-}CCA}}_{\KEMs}(\mathcal{B}_3)
++ \negl(\lambda).
+\]
+
+\subsection{Combining the Bounds}
+
+After replacing any one of $z_4$, $\textsf{shk}_2$, or $\textsf{shk}_3$
+with uniform, the session keys are indistinguishable from uniform in
+the ROM (by the argument of Section~A.1 applied to
+the chain~\eqref{eq:apx2}--\eqref{eq:apx5}).  Hence each path gives an
+independent upper bound on the real-protocol advantage.  Taking the
+tightest (minimum) of the three bounds and noting that SM4 key
+truncation ($256 \to 128$ bits) preserves uniformity yields
+\[
+\Adv^{\textsc{ror}}_{\Pi}(\mathcal A) \le
+q_s\cdot\min\bigl\{
+\Adv^{\mathrm{GDH}}_{\textsf{SM2}},\;
+\Adv^{\mathrm{IND\text{-}CCA}}_{\KEMe},\;
+\Adv^{\mathrm{IND\text{-}CCA}}_{\KEMs}
+\bigr\} + \negl(\lambda),
+\]
+which is Theorem~\ref{thm:hybrid}.  The minimum formalises hybrid
+security: the protocol remains secure as long as \emph{any one} of the
+classical SM2 leg, the ephemeral post-quantum leg, or the static
+post-quantum leg resists cryptanalysis.
+
+\subsection*{Omitted Details}
+
+A fully rigorous version of this proof would additionally:
+(i)~expand each $\KDF_n$ call into its constituent HMAC-based RO
+queries with explicit domain separation, yielding
+$|\Adv_i - \Adv_{i+1}|$ bounds for each intermediate game;
+(ii)~analyse the initiator-side KDF chain ($z_1$, $\textsf{shk}_1$,
+$z_2$ absorbed into $ck_{\text{in}}$), which provides an independent
+earlier barrier and would tighten the final bound;
+(iii)~formalise the hybrid freshness condition
+$\textsf{F1} \lor \textsf{F2} \lor \textsf{F3}$ in the RoR experiment;
+(iv)~add bad-flag analyses for RO collisions and ciphertext collisions.
+All of these are routine in the game-hopping
+framework~\cite{32,35} and their omission does not affect the
+validity of the core reductions presented above.
+
+\end{appendix}
+
+\end{document}

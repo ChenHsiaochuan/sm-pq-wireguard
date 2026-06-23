@@ -1,0 +1,4 @@
+proverif wireguard_agreement_confirm_psk.pv > wireguard_agreement_confirm_psk.pv.log
+proverif wireguard_agreement_confirm_kemltki_ra.pv > wireguard_agreement_confirm_kemltki_ra.pv.log
+proverif wireguard_agreement_confirm_ldhi_dhekr.pv > wireguard_agreement_confirm_ldhi_dhekr.pv.log
+proverif wireguard_agreement_confirm_ldhi_ldhr_precompi.pv > wireguard_agreement_confirm_ldhi_ldhr_precompi.pv.log

@@ -1,0 +1,194 @@
+free att.
+free sempty.
+free sident.
+free snoise.
+free sxI.
+free sxR.
+free sxTi0.
+free szerostring.
+fun aead/4.
+fun aenc/2.
+fun h/1.
+fun kdf1/1.
+fun kdf2/1.
+fun kdf3/1.
+fun mac/2.
+fun okay/0.
+fun pair/2.
+fun pk/1.
+reduc   checkaead(k, n, a, aead(k, n, a, p)) = okay.
+reduc   decrypt(k, n, aead(k, n, a, p)) = p.
+reduc   checkmac(k, m, mac(k, m)) = okay.
+reduc   adec(aenc(x_1, pk(x_2)), x_2) = x_1.
+reduc   fst((x_1, x_2)) = x_1.
+reduc   snd((x_1, x_2)) = x_2.
+let RevealKEMLtk(kemltk_1)=
+    0.
+let RevealKEMEki(kemeki_1)=
+    0.
+let RevealRe(re_1)=
+    0.
+let RevealRa(ra_1)=
+    0.
+let RevealRb(rb_1)=
+    
+    out(att,rb_1).
+let RevealPsk(psk_1)=
+    0.
+let Initiator(kemltkI_1, kempkR_1, psk_1)=
+    let kempkI_1=pk(kemltkI_1) in
+    new rb_1;
+    new kemekI_1;
+    new ts_1;
+    new sidI_1;
+    new firstI_1;
+    let kempekI_1=pk(kemekI_1) in
+    ((((let kb_1=h(rb_1) in
+        let ck_1=h(snoise) in
+        let hi0_1=h((ck_1, sident)) in
+        let hi1_1=h((hi0_1, kempkR_1)) in
+        let ci0_1=kdf1((ck_1, kempekI_1)) in
+        let ct1_1=aenc(kb_1, kempkR_1) in
+        let hi2_1=h((hi1_1, kempekI_1)) in
+        let ci1_1=kdf1((ci0_1, kb_1)) in
+        let ki1_1=kdf2((ci0_1, kb_1)) in
+        let astat_1=aead(ki1_1, szerostring, hi2_1, h(kempkI_1)) in
+        let hi3_1=h((hi2_1, astat_1)) in
+        let ci2_1=kdf1((ci1_1, h((kempkI_1, kempkR_1)))) in
+        let ki2_1=kdf2((ci1_1, h((kempkI_1, kempkR_1)))) in
+        let ats_1=aead(ki2_1, szerostring, hi3_1, ts_1) in
+        let hi4_1=h((hi3_1, ats_1)) in
+        let kmacI1_1=h((snoise, (kempkR_1, psk_1))) in
+        let macI1_1=mac(kmacI1_1,
+                        (sidI_1, (kempekI_1, (ct1_1, (astat_1, ats_1))))) in
+        
+        out(att,(sxI, (sidI_1, (kempekI_1, (ct1_1, (astat_1, (ats_1, macI1_1)))))));
+        let kmacR_1=h((snoise, (kempkI_1, psk_1))) in
+        in(att,freshsxRsidIRsidRctctaemptmacR);
+        let ((=sxR, (sidIR_1, (sidR_1, (ct2_1, (ct3_1, (aempt_1, macR_1)))))))=freshsxRsidIRsidRctctaemptmacR in
+        if checkmac(kmacR_1, (sidIR_1, (sidR_1, (ct2_1, (ct3_1, aempt_1)))),
+                    macR_1) =
+           okay then
+            (if sidIR_1 = sidI_1 then
+                 (let ke_1=adec(ct2_1, kemekI_1) in
+                  let ka_1=adec(ct3_1, kemltkI_1) in
+                  let ci3_1=kdf1((ci2_1, ct2_1)) in
+                  let hi5_1=h((hi4_1, ct2_1)) in
+                  let ci4_1=kdf1((ci3_1, ke_1)) in
+                  let ci5_1=kdf1((ci4_1, ka_1)) in
+                  let ci6_1=kdf1((ci5_1, psk_1)) in
+                  let hit_1=kdf2((ci5_1, psk_1)) in
+                  let ki6_1=kdf3((ci5_1, psk_1)) in
+                  let hi6_1=h((hi5_1, hit_1)) in
+                  let dempty_1=decrypt(ki6_1, szerostring, aempt_1) in
+                  if checkaead(ki6_1, szerostring, hi6_1, aempt_1) = okay then
+                      (if dempty_1 = sempty then
+                           (
+                            let hi7_1=h((hi6_1, aempt_1)) in
+                            let ci7_1=kdf1(ci6_1) in
+                            let ki7_1=kdf2(ci6_1) in
+                            
+                            let keyItoR_1=kdf1(ki7_1) in
+                            
+                            let keyRtoI_1=kdf2(ki7_1) in
+                            
+                            let confirmI_1=aead(keyItoR_1, szerostring, sempty, firstI_1) in
+                            
+                            out(att,(sxTi0, (sidR_1, (szerostring, confirmI_1)))))))))
+     | (RevealKEMEki(kemekI_1))))
+   | (RevealRb(rb_1))).
+let Responder(kemltkR_1, kempkI_1, psk_1)=
+    let kempkR_1=pk(kemltkR_1) in
+    new re_1;
+    new ra_1;
+    new sidR_1;
+    let ka_1=h(ra_1) in
+    let ke_1=h(re_1) in
+    ((((let ck_1=h(snoise) in
+        in(att,freshsxIsidIkempekIctastatatsmacI);
+        let ((=sxI, (sidI_1, (kempekI_1, (ct1_1, (astat_1, (ats_1, macI1_1)))))))=freshsxIsidIkempekIctastatatsmacI in
+        let hr0_1=h((ck_1, sident)) in
+        let hr1_1=h((hr0_1, kempkR_1)) in
+        let cr0_1=kdf1((ck_1, kempekI_1)) in
+        let hr2_1=h((hr1_1, kempekI_1)) in
+        let kb_1=adec(ct1_1, kemltkR_1) in
+        let cr1_1=kdf1((cr0_1, kb_1)) in
+        let kr1_1=kdf2((cr0_1, kb_1)) in
+        let hpkikem_1=decrypt(kr1_1, szerostring, astat_1) in
+        let kmacI1_1=h((snoise, (kempkR_1, psk_1))) in
+        if checkmac(kmacI1_1, (sidI_1, (kempekI_1, (ct1_1, (astat_1, ats_1)))),
+                    macI1_1) =
+           okay then
+            (if checkaead(kr1_1, szerostring, hr2_1, astat_1) = okay then
+                 (if hpkikem_1 = h(kempkI_1) then
+                      (let ct3_1=aenc(ka_1, kempkI_1) in
+                       let hr3_1=h((hr2_1, astat_1)) in
+                       let cr2_1=kdf1((cr1_1, h((kempkI_1, kempkR_1)))) in
+                       let kr2_1=kdf2((cr1_1, h((kempkI_1, kempkR_1)))) in
+                       let dtime_1=decrypt(kr2_1, szerostring, ats_1) in
+                       if checkaead(kr2_1, szerostring, hr3_1, ats_1) = okay then
+                           (let hr4_1=h((hr3_1, ats_1)) in
+                            
+                            let ct2_1=aenc(ke_1, kempekI_1) in
+                            let cr3_1=kdf1((cr2_1, ct2_1)) in
+                            let hr5_1=h((hr4_1, ct2_1)) in
+                            let cr4_1=kdf1((cr3_1, ke_1)) in
+                            let cr5_1=kdf1((cr4_1, ka_1)) in
+                            let cr6_1=kdf1((cr5_1, psk_1)) in
+                            let hrt_1=kdf2((cr5_1, psk_1)) in
+                            let kr6_1=kdf3((cr5_1, psk_1)) in
+                            let hr6_1=h((hr5_1, hrt_1)) in
+                            let aempt_1=aead(kr6_1, szerostring, hr6_1, sempty) in
+                            let hr7_1=h((hr6_1, aempt_1)) in
+                            let kmacR_1=h((snoise, (kempkI_1, psk_1))) in
+                            let macR_1=mac(kmacR_1, (sidI_1, (sidR_1, (ct2_1, (ct3_1, aempt_1))))) in
+                            
+                            out(att,(sxR, (sidI_1, (sidR_1, (ct2_1, (ct3_1, (aempt_1, macR_1)))))));
+                            let cr7_1=kdf1(cr6_1) in
+                            let kr7_1=kdf2(cr6_1) in
+                            
+                            let keyItoR_1=kdf1(kr7_1) in
+                            
+                            let keyRtoI_1=kdf2(kr7_1) in
+                            
+                            in(att,freshsxTisidCcIconfirmI);
+                            let ((=sxTi0, (sidC_1, (cI0_1, confirmI_1))))=freshsxTisidCcIconfirmI in
+                            if sidC_1 = sidR_1 then
+                                (if cI0_1 = szerostring then
+                                     (let dfirstI_1=decrypt(keyItoR_1, cI0_1, confirmI_1) in
+                                      if checkaead(keyItoR_1, cI0_1, sempty, confirmI_1) = okay then
+                                          (0))))))))
+     | (RevealRa(ra_1))))
+   | (RevealRe(re_1))).
+
+free kemltkR1, kemltkR2, kemltkI, psk[private].
+
+let sys1 = out(att, (pk(kemltkR1), pk(kemltkR2), pk(kemltkI)));  (!^1 Initiator(kemltkI, pk(kemltkR1), psk) | !^1 Responder(kemltkR1, pk(kemltkI), psk) | !^1 RevealKEMLtk(kemltkI) | !^1 RevealPsk(psk)).
+
+let sys2 = out(att, (pk(kemltkR1), pk(kemltkR2), pk(kemltkI)));  (!^1 Initiator(kemltkI, pk(kemltkR2), psk) | !^1 Responder(kemltkR2, pk(kemltkI), psk) | !^1 RevealKEMLtk(kemltkI) | !^1 RevealPsk(psk)).
+query trace_equiv(sys1,sys2).
+
+
+(*
+All wellformedness checks were successful.
+*)
+
+(*
+Generated from:
+Tamarin version 1.11.0
+Maude version 2.7.1
+Git revision: 106ff15c66bbd30b15da238777ecdba9bb19714d, branch: develop
+Compiled at: 2024-10-30 14:17:36.256132 UTC
+*)
+
+(*
+All wellformedness checks were successful.
+*)
+
+(*
+Generated from:
+Tamarin version 1.11.0
+Maude version 2.7.1
+Git revision: 106ff15c66bbd30b15da238777ecdba9bb19714d, branch: develop
+Compiled at: 2024-10-30 14:17:36.256132 UTC
+*)

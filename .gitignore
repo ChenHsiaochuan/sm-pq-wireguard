@@ -1,0 +1,46 @@
+# Rust build artifacts
+target/
+**/target/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.synctex(busy)
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# Archives and binaries (not suitable for Git)
+*.zip
+*.pdf
+*.a
+*.rlib
+*.so
+*.dll
+*.dylib
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,147 @@
+(*
+ * agility_suite_model.pv
+ *
+ * Auxiliary symbolic model for the SM-PQ-WireGuard v6 agility framework.
+ *
+ * Scope (deliberately narrow): this model checks RUNTIME EPHEMERAL-KEM SUITE
+ * BINDING only -- i.e. that the public one-byte suite identifier f_suite is
+ * authenticated and bound into the handshake transcript, so that an active
+ * Dolev-Yao attacker cannot tamper with the selector (downgrade) or splice a
+ * ciphertext from one suite into a session negotiated for another
+ * (cross-suite ciphertext confusion).  It does NOT model static-KEM agility
+ * (the static slot is the fixed Classic McEliece identity anchor), nor does it
+ * re-prove the main key-secrecy / forward-secrecy lemmas, which are covered by
+ * the full SAPIC+/ProVerif/Tamarin development.
+ *
+ * Abstraction:
+ *   - Two public suite identifiers s1, s2 (constants known to the attacker),
+ *     standing for any two registered ephemeral-KEM suites.
+ *   - The ephemeral KEM is an abstract, suite-tagged IND-CCA KEM.
+ *   - The suite byte is bound under the PSK-keyed MAC (mac1) AND mixed into the
+ *     KDF transcript, exactly as in Section 3.4.1 / 3.5 of the paper.
+ *   - InitHello and RespHello carry distinct message-type tags (mt1, mt2),
+ *     exactly as the WireGuard wire format does (message_type byte 0x01 vs
+ *     0x02).  This domain separation is load-bearing: without it the two
+ *     handshake messages are structurally identical tuples and ProVerif
+ *     (correctly) treats a RespHello MAC as a usable InitHello MAC, which
+ *     defeats the suite-agreement correspondence.  The tags model the real
+ *     protocol's per-message-type framing, not an added countermeasure.
+ *
+ * Expected verdicts (positive model):
+ *   - correspondence  eRAccept(sidx,s) ==> eISend(sidx,s)   : TRUE
+ *       (responder only accepts the suite the initiator authenticated)
+ *   - event(Bad)                                            : NOT reachable
+ *       (no cross-suite / downgrade acceptance, no fallback path)
+ *   - attacker(secret_payload)                              : NOT derivable
+ *       (session key, hence tunnel payload, stays secret)
+ *)
+
+set reconstructTrace = true.
+
+(* ------------------------------------------------------------------ *)
+(* Channels                                                            *)
+(* ------------------------------------------------------------------ *)
+free att:channel.                 (* public network, full DY control   *)
+free ctrlI:channel [private].     (* referee link: initiator's true suite *)
+free ctrlR:channel [private].     (* referee link: responder's accepted suite *)
+
+(* ------------------------------------------------------------------ *)
+(* Public suite identifiers (the f_suite byte). Attacker knows both.   *)
+(* ------------------------------------------------------------------ *)
+free s1:bitstring.
+free s2:bitstring.
+
+(* ------------------------------------------------------------------ *)
+(* Primitives                                                          *)
+(* ------------------------------------------------------------------ *)
+fun okay():bitstring.
+
+(* message-type tags: InitHello (mt1) vs RespHello (mt2), as on the wire *)
+const mt1:bitstring.
+const mt2:bitstring.
+
+(* abstract suite-tagged ephemeral KEM *)
+fun kempk(bitstring, bitstring):bitstring.            (* kempk(sk, suite) -> pk *)
+fun encap(bitstring, bitstring, bitstring):bitstring. (* encap(pk, coins, suite) -> ct *)
+fun kemss(bitstring, bitstring, bitstring):bitstring. (* shared secret value *)
+reduc forall sk:bitstring, suite:bitstring, coins:bitstring;
+    decap(encap(kempk(sk,suite), coins, suite), sk, suite)
+      = kemss(kempk(sk,suite), coins, suite).
+
+(* keyed MAC (HMAC-SM3 / mac1), KDF (HMAC-SM3 chain), AEAD (SM4-GCM)   *)
+fun mac(bitstring, bitstring):bitstring.
+reduc forall k:bitstring, m:bitstring; checkmac(k, m, mac(k,m)) = okay().
+fun kdf(bitstring):bitstring.
+fun senc(bitstring, bitstring):bitstring.
+reduc forall k:bitstring, m:bitstring; sdec(k, senc(k,m)) = m.
+
+(* ------------------------------------------------------------------ *)
+(* Events and secrecy witness                                         *)
+(* ------------------------------------------------------------------ *)
+event eISend(bitstring, bitstring).     (* sidx, suite chosen by initiator *)
+event eRAccept(bitstring, bitstring).   (* sidx, suite accepted by responder *)
+event Bad().
+
+free secret_payload:bitstring [private].
+
+(* ------------------------------------------------------------------ *)
+(* Queries                                                            *)
+(* ------------------------------------------------------------------ *)
+(* same-suite initiator/responder correspondence (suite agreement)    *)
+query sidx:bitstring, s:bitstring;
+    event(eRAccept(sidx,s)) ==> event(eISend(sidx,s)).
+(* cross-suite / downgrade acceptance must be unreachable              *)
+query event(Bad()).
+(* tunnel payload secrecy under the negotiated suite                   *)
+query attacker(secret_payload).
+
+(* ------------------------------------------------------------------ *)
+(* Initiator: stamps f_suite into m1 and binds it under the PSK MAC    *)
+(* ------------------------------------------------------------------ *)
+let Init(psk:bitstring, cs:bitstring) =
+    new ek:bitstring;
+    new sidx:bitstring;
+    let epk = kempk(ek, cs) in
+    let m1 = (mt1, cs, sidx, epk) in
+    event eISend(sidx, cs);
+    out(ctrlI, (sidx, cs));
+    (* mac1 covers the WHOLE InitHello, including the suite byte *)
+    out(att, (m1, mac(psk, m1)));
+    in(att, (m2:bitstring, t2:bitstring));
+    (* initiator requires its own suite echoed back, and a valid mac *)
+    let (=mt2, =cs, =sidx, ct:bitstring) = m2 in
+    if checkmac(psk, m2, t2) = okay() then
+    let ss = decap(ct, ek, cs) in
+    let k = kdf((cs, sidx, epk, ct, ss)) in
+    out(att, senc(k, secret_payload)).
+
+(* ------------------------------------------------------------------ *)
+(* Responder: verifies the suite-bound mac BEFORE accepting (the       *)
+(* "response-suite check") and echoes the received suite               *)
+(* ------------------------------------------------------------------ *)
+let Resp(psk:bitstring) =
+    in(att, (m1:bitstring, t1:bitstring));
+    let (=mt1, srecv:bitstring, sidx:bitstring, epk:bitstring) = m1 in
+    (* suite-binding check: mac covers the suite byte *)
+    if checkmac(psk, m1, t1) = okay() then
+    new coins:bitstring;
+    let ct = encap(epk, coins, srecv) in
+    let ss = kemss(epk, coins, srecv) in
+    let k = kdf((srecv, sidx, epk, ct, ss)) in
+    let m2 = (mt2, srecv, sidx, ct) in
+    event eRAccept(sidx, srecv);
+    out(ctrlR, (sidx, srecv));
+    out(att, (m2, mac(psk, m2))).
+
+(* ------------------------------------------------------------------ *)
+(* Referee: fires Bad iff a single session index is accepted by the    *)
+(* responder under a different suite than the initiator authenticated  *)
+(* ------------------------------------------------------------------ *)
+let Referee() =
+    in(ctrlI, (sidx:bitstring, csi:bitstring));
+    in(ctrlR, (=sidx, csr:bitstring));
+    if csi <> csr then event Bad().
+
+process
+    new psk:bitstring;
+    ( !Init(psk, s1) | !Init(psk, s2) | !Resp(psk) | !Referee() )

@@ -1,0 +1,2 @@
+proverif proverif-anonymity-initiator-no-reveal.pv > proverif-anonymity-initiator-no-reveal.log
+proverif proverif-anonymity-responder-no-reveal.pv > proverif-anonymity-responder-no-reveal.log

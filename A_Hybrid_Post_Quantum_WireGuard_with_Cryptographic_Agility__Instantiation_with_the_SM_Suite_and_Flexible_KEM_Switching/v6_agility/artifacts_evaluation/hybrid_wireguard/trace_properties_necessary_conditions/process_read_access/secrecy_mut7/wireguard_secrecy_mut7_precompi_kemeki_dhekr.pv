@@ -1,0 +1,312 @@
+const g:bitstring.
+free att:channel.
+free sempty:bitstring.
+free sident:bitstring.
+free sinitiator:bitstring.
+free snoise:bitstring.
+free sresponder:bitstring.
+free sxI:bitstring.
+free sxR:bitstring.
+free sxTi0:bitstring.
+free szerostring:bitstring.
+fun adec(bitstring,bitstring):bitstring.
+fun aead(bitstring,bitstring,bitstring,bitstring):bitstring.
+fun aenc(bitstring,bitstring):bitstring.
+fun exp(bitstring,bitstring):bitstring.
+fun fst(bitstring):bitstring.
+fun h(bitstring):bitstring.
+fun kdf1(bitstring):bitstring.
+fun kdf2(bitstring):bitstring.
+fun kdf3(bitstring):bitstring.
+fun mac(bitstring,bitstring):bitstring.
+fun okay():bitstring.
+fun pair(bitstring,bitstring):bitstring.
+fun pk(bitstring):bitstring.
+fun sdec(bitstring,bitstring):bitstring.
+fun senc(bitstring,bitstring):bitstring.
+fun snd(bitstring):bitstring.
+fun xaead(bitstring,bitstring,bitstring,bitstring):bitstring.
+event eIConfirm(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eIKeys(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eISend(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eI_SK7(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eI_SK_ItoR(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eI_SK_RtoI(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eRConfirm(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eRKeys(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eRRec(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eR_SK7(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eR_SK_ItoR(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eR_SK_RtoI(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event eRevDHE(bitstring).
+event eRevKEMEki(bitstring).
+event eRevKEMLtk(bitstring).
+event eRevLDH(bitstring).
+event eRevPre(bitstring,bitstring).
+event eRevPsk(bitstring).
+event eRevRa(bitstring).
+event eRevRb(bitstring).
+event eRevRe(bitstring).
+equation forall a:bitstring,b:bitstring; exp( exp(g,a),b) = exp(exp(g,b),a).
+equation forall x_1:bitstring, x_2:bitstring;   adec(aenc(x_1, pk(x_2)), x_2) = x_1.
+equation forall x_1:bitstring, x_2:bitstring;   fst((x_1, x_2)) = x_1.
+equation forall x_1:bitstring, x_2:bitstring;   sdec(senc(x_1, x_2), x_2) = x_1.
+equation forall x_1:bitstring, x_2:bitstring;   snd((x_1, x_2)) = x_2.
+reduc forall a:bitstring, k:bitstring, n:bitstring, p:bitstring;   checkaead(k, n, a, aead(k, n, a, p)) = okay.
+reduc forall a:bitstring, k:bitstring, n:bitstring, p:bitstring;   checkxaead(k, n, a, xaead(k, n, a, p)) = okay.
+reduc forall a:bitstring, k:bitstring, n:bitstring, p:bitstring;   decrypt(k, n, aead(k, n, a, p)) = p.
+reduc forall a:bitstring, k:bitstring, n:bitstring, p:bitstring;   xdecrypt(k, n, xaead(k, n, a, p)) = p.
+reduc forall k:bitstring, m:bitstring;   checkmac(k, m, mac(k, m)) = okay.
+set nounifIgnoreNtimes = 4.
+noselect x:bitstring; attacker(exp(g,x)).
+noselect x:bitstring; attacker(h(x)).
+noselect x, y: bitstring; attacker(senc( *x, h( *y)))[ignoreAFewTimes].
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eRConfirm(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && event(eIConfirm(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> (event(eRevDHE(dhekr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki))).
+
+let RevealLDH(ldh_2:bitstring)=
+    event eRevLDH( exp(g, ldh_2) );
+    out(att,ldh_2).
+let RevealPRE(ldha_2:bitstring, ldhb_2:bitstring)=
+    event eRevPre( exp(g, ldha_2), exp(g, ldhb_2) );
+    out(att,exp(exp(g, ldha_2), ldhb_2)).
+let RevealDHE(dhe_2:bitstring)=
+    event eRevDHE( exp(g, dhe_2) );
+    out(att,dhe_2).
+let RevealKEMLtk(kemltkr_2:bitstring)=
+    event eRevKEMLtk( pk(kemltkr_2) );
+    out(att,kemltkr_2).
+let RevealKEMEki(kemeki_2:bitstring)=
+    event eRevKEMEki( pk(kemeki_2) );
+    out(att,kemeki_2).
+let RevealRe(re_2:bitstring)=
+    event eRevRe( re_2 );
+    out(att,re_2).
+let RevealRa(ra_2:bitstring)=
+    event eRevRa( ra_2 );
+    out(att,ra_2).
+let RevealRb(rb_2:bitstring)=
+    event eRevRb( rb_2 );
+    out(att,rb_2).
+let RevealPsk(psk_2:bitstring)=
+    event eRevPsk( psk_2 );
+    out(att,psk_2).
+let Initiator(kemltkI_2:bitstring, ldhI_2:bitstring, kempkR_2:bitstring,
+              dhpkR_2:bitstring, psk_2:bitstring)=
+    let dhpkI_2:bitstring=exp(g, ldhI_2) in
+    let kempkI_2:bitstring=pk(kemltkI_2) in
+    new dhekI_2[]:bitstring;
+    new rb_2[]:bitstring;
+    new kemekI_2[]:bitstring;
+    new ts_2[]:bitstring;
+    new sidI_2[]:bitstring;
+    new firstI_2[]:bitstring;
+    let sisr_2:bitstring=exp(dhpkR_2, ldhI_2) in
+    let kempekI_2:bitstring=pk(kemekI_2) in
+    ((((((let kb_2:bitstring=h(rb_2) in
+          let dhpekI_2:bitstring=exp(g, dhekI_2) in
+          let ck_2:bitstring=h(snoise) in
+          let eisr_2:bitstring=exp(dhpkR_2, dhekI_2) in
+          let hi0_2:bitstring=h((ck_2, sident)) in
+          let hi1_2:bitstring=h((hi0_2, (dhpkR_2, kempkR_2))) in
+          let ci0_2:bitstring=kdf1((ck_2, (dhpekI_2, kempekI_2))) in
+          let ct1_2:bitstring=aenc(kb_2, kempkR_2) in
+          let ct1_enc_2:bitstring=senc(ct1_2, h(eisr_2)) in
+          let hi2_2:bitstring=h((hi1_2, (dhpekI_2, kempekI_2))) in
+          let ci1_2:bitstring=kdf1((ci0_2, (eisr_2, kb_2))) in
+          let ki1_2:bitstring=kdf2((ci0_2, (eisr_2, kb_2))) in
+          let astat_2:bitstring=aead(ki1_2, szerostring, hi2_2,
+                                     h((kempkI_2, dhpkI_2))) in
+          let hi3_2:bitstring=h((hi2_2, astat_2)) in
+          let ci2_2:bitstring=kdf1((ci1_2, (sisr_2, h((kempkI_2, kempkR_2))))) in
+          let ki2_2:bitstring=kdf2((ci1_2, (sisr_2, h((kempkI_2, kempkR_2))))) in
+          let ats_2:bitstring=aead(ki2_2, szerostring, hi3_2, ts_2) in
+          let hi4_2:bitstring=h((hi3_2, ats_2)) in
+          let kmacI1_2:bitstring=h((snoise, (kempkR_2, psk_2))) in
+          let macI1_2:bitstring=mac(kmacI1_2,
+                                    (sidI_2, (dhpekI_2, (kempekI_2, (ct1_enc_2, (astat_2, ats_2)))))) in
+          event eISend( ki2_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                        dhpekI_2, psk_2, kb_2
+                );
+          out(att,(sxI, (sidI_2, (dhpekI_2, (kempekI_2, (ct1_enc_2, (astat_2, (ats_2, macI1_2))))))));
+          let kmacR_2:bitstring=h((snoise, (kempkI_2, psk_2))) in
+          in(att,(=sxR, (sidIR_2:bitstring, (sidR_2:bitstring, (dhpekR_2:bitstring, (ct2_2:bitstring, (ct3_enc_2:bitstring, (aempt_2:bitstring, macR_2:bitstring))))))));
+          if dhpekR_2 <> g then
+              (if sidIR_2 = sidI_2 then
+                   (if checkmac(kmacR_2,
+                                (sidIR_2, (sidR_2, (dhpekR_2, (ct2_2, (ct3_enc_2, aempt_2))))), macR_2) =
+                       okay then
+                        (let eier_2:bitstring=exp(dhpekR_2, dhekI_2) in
+                         let sier_2:bitstring=exp(dhpekR_2, ldhI_2) in
+                         let ke_2:bitstring=adec(ct2_2, kemekI_2) in
+                         let ct3_2:bitstring=sdec(ct3_enc_2, h(sier_2)) in
+                         let ka_2:bitstring=adec(ct3_2, kemltkI_2) in
+                         let ci3_2:bitstring=kdf1((ci2_2, (dhpekR_2, ct2_2))) in
+                         let hi5_2:bitstring=h((hi4_2, (dhpekR_2, ct2_2))) in
+                         let ci4_2:bitstring=kdf1((ci3_2, (eier_2, ke_2))) in
+                         let ci5_2:bitstring=kdf1((ci4_2, (sier_2, ka_2))) in
+                         let ci6_2:bitstring=kdf1((ci5_2, psk_2)) in
+                         let hit_2:bitstring=kdf2((ci5_2, psk_2)) in
+                         let ki6_2:bitstring=kdf3((ci5_2, psk_2)) in
+                         let hi6_2:bitstring=h((hi5_2, hit_2)) in
+                         let dempty_2:bitstring=decrypt(ki6_2, szerostring, aempt_2) in
+                         if checkaead(ki6_2, szerostring, hi6_2, aempt_2) = okay then
+                             (if dempty_2 = sempty then
+                                  (event eIKeys( ki6_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                                                 dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   let hi7_2:bitstring=h((hi6_2, aempt_2)) in
+                                   let ci7_2:bitstring=kdf1(ci6_2) in
+                                   let ki7_2:bitstring=kdf2(ci6_2) in
+                                   event eI_SK7( ki7_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                                                 dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   let keyItoR_2:bitstring=kdf1(ki7_2) in
+                                   event eI_SK_ItoR( keyItoR_2, kempkI_2, kempkR_2, kempekI_2, psk_2, rb_2
+                                         );
+                                   let keyRtoI_2:bitstring=kdf2(ki7_2) in
+                                   event eI_SK_RtoI( keyRtoI_2, kempkI_2, kempkR_2, kempekI_2, psk_2, rb_2
+                                         );
+                                   let confirmI_2:bitstring=aead(keyItoR_2, szerostring, sempty,
+                                                                 firstI_2) in
+                                   event eIConfirm( keyItoR_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2,
+                                                    kempekI_2, dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   out(att,(sxTi0, (sidR_2, (szerostring, confirmI_2))))))))))
+       | (RevealDHE(dhekI_2))))
+     | (RevealKEMEki(kemekI_2))))
+   | (RevealRb(rb_2))).
+let Responder(kemltkR_2:bitstring, ldhR_2:bitstring, kempkI_2:bitstring,
+              dhpkI_2:bitstring, psk_2:bitstring)=
+    let dhpkR_2:bitstring=exp(g, ldhR_2) in
+    let kempkR_2:bitstring=pk(kemltkR_2) in
+    new re_2[]:bitstring;
+    new ra_2[]:bitstring;
+    new sidR_2[]:bitstring;
+    new dhekR_2[]:bitstring;
+    let dhpekR_2:bitstring=exp(g, dhekR_2) in
+    let ka_2:bitstring=h(ra_2) in
+    let ke_2:bitstring=h(re_2) in
+    let srsi_2:bitstring=exp(dhpkI_2, ldhR_2) in
+    ((((((let ck_2:bitstring=h(snoise) in
+          in(att,(=sxI, (sidI_2:bitstring, (dhpekI_2:bitstring, (kempekI_2:bitstring, (ct1_enc_2:bitstring, (astat_2:bitstring, (ats_2:bitstring, macI1_2:bitstring))))))));
+          let eisr_2:bitstring=exp(dhpekI_2, ldhR_2) in
+          let hr0_2:bitstring=h((ck_2, sident)) in
+          let hr1_2:bitstring=h((hr0_2, (dhpkR_2, kempkR_2))) in
+          let cr0_2:bitstring=kdf1((ck_2, (dhpekI_2, kempekI_2))) in
+          let hr2_2:bitstring=h((hr1_2, (dhpekI_2, kempekI_2))) in
+          let ct1_2:bitstring=sdec(ct1_enc_2, h(eisr_2)) in
+          let kb_2:bitstring=adec(ct1_2, kemltkR_2) in
+          let cr1_2:bitstring=kdf1((cr0_2, (eisr_2, kb_2))) in
+          let kr1_2:bitstring=kdf2((cr0_2, (eisr_2, kb_2))) in
+          let hpkikem_2:bitstring=decrypt(kr1_2, szerostring, astat_2) in
+          if dhpekI_2 <> g then
+              (if checkaead(kr1_2, szerostring, hr2_2, astat_2) = okay then
+                   (let kmacI1_2:bitstring=h((snoise, (kempkR_2, psk_2))) in
+                    if checkmac(kmacI1_2,
+                                (sidI_2, (dhpekI_2, (kempekI_2, (ct1_2, (astat_2, ats_2))))), macI1_2) =
+                       okay then
+                        (if hpkikem_2 = h((kempkI_2, dhpkI_2)) then
+                             (let ct3_2:bitstring=aenc(ka_2, kempkI_2) in
+                              let hr3_2:bitstring=h((hr2_2, astat_2)) in
+                              let cr2_2:bitstring=kdf1((cr1_2, (srsi_2, h((kempkI_2, kempkR_2))))) in
+                              let kr2_2:bitstring=kdf2((cr1_2, (srsi_2, h((kempkI_2, kempkR_2))))) in
+                              let dtime_2:bitstring=decrypt(kr2_2, szerostring, ats_2) in
+                              if checkaead(kr2_2, szerostring, hr3_2, ats_2) = okay then
+                                  (let hr4_2:bitstring=h((hr3_2, ats_2)) in
+                                   event eRRec( kr2_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                                                dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   let eier_2:bitstring=exp(dhpekI_2, dhekR_2) in
+                                   let sier_2:bitstring=exp(dhpkI_2, dhekR_2) in
+                                   let ct2_2:bitstring=aenc(ke_2, kempekI_2) in
+                                   let ct3_enc_2:bitstring=senc(ct3_2, h(sier_2)) in
+                                   let cr3_2:bitstring=kdf1((cr2_2, (dhpekR_2, ct2_2))) in
+                                   let hr5_2:bitstring=h((hr4_2, (dhpekR_2, ct2_2))) in
+                                   let cr4_2:bitstring=kdf1((cr3_2, (eier_2, ke_2))) in
+                                   let cr5_2:bitstring=kdf1((cr4_2, (sier_2, ka_2))) in
+                                   let cr6_2:bitstring=kdf1((cr5_2, psk_2)) in
+                                   let hrt_2:bitstring=kdf2((cr5_2, psk_2)) in
+                                   let kr6_2:bitstring=kdf3((cr5_2, psk_2)) in
+                                   let hr6_2:bitstring=h((hr5_2, hrt_2)) in
+                                   let aempt_2:bitstring=aead(kr6_2, szerostring, hr6_2, sempty) in
+                                   let hr7_2:bitstring=h((hr6_2, aempt_2)) in
+                                   let kmacR_2:bitstring=h((snoise, (kempkI_2, psk_2))) in
+                                   let macR_2:bitstring=mac(kmacR_2,
+                                                            (sidI_2, (sidR_2, (dhpekR_2, (ct2_2, (ct3_enc_2, aempt_2)))))) in
+                                   event eRKeys( kr6_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                                                 dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   out(att,(sxR, (sidI_2, (sidR_2, (dhpekR_2, (ct2_2, (ct3_enc_2, (aempt_2, macR_2))))))));
+                                   let cr7_2:bitstring=kdf1(cr6_2) in
+                                   let kr7_2:bitstring=kdf2(cr6_2) in
+                                   event eR_SK7( kr7_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2, kempekI_2,
+                                                 dhpekI_2, dhpekR_2, psk_2, kb_2, ka_2, ke_2
+                                         );
+                                   let keyItoR_2:bitstring=kdf1(kr7_2) in
+                                   event eR_SK_ItoR( keyItoR_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2,
+                                                     kempekI_2, dhpekI_2, dhpekR_2, kb_2, ka_2, ke_2
+                                         );
+                                   let keyRtoI_2:bitstring=kdf2(kr7_2) in
+                                   event eR_SK_RtoI( keyRtoI_2, kempkI_2, kempkR_2, dhpkI_2, dhpkR_2,
+                                                     kempekI_2, dhpekI_2, dhpekR_2, kb_2, ka_2, ke_2
+                                         );
+                                   in(att,(=sxTi0, (sidC_2:bitstring, (cI0_2:bitstring, confirmI_2:bitstring))));
+                                   if sidC_2 = sidR_2 then
+                                       (if cI0_2 = szerostring then
+                                            (let dfirstI_2:bitstring=decrypt(keyItoR_2, cI0_2, confirmI_2) in
+                                             if checkaead(keyItoR_2, cI0_2, sempty, confirmI_2) = okay then
+                                                 (event eRConfirm( keyItoR_2, kempkI_2, kempkR_2, dhpkI_2,
+                                                                   dhpkR_2, kempekI_2, dhpekI_2, dhpekR_2,
+                                                                   psk_2, kb_2, ka_2, ke_2
+                                                        ))))))))))
+       | (RevealDHE(dhekR_2))))
+     | (RevealRa(ra_2))))
+   | (RevealRe(re_2))).
+
+
+process
+    !
+    (new ldhI_2:bitstring;
+     new ldhR_2:bitstring;
+     new kemltkI_2:bitstring;
+     new kemltkR_2:bitstring;
+     new psk_2:bitstring;
+     out(att,(sinitiator, (pk(kemltkI_2), exp(g, ldhI_2))));
+     out(att,(sresponder, (pk(kemltkR_2), exp(g, ldhR_2))));
+     ((((((((((((((!
+                   (Initiator(kemltkI_2, ldhI_2, pk(kemltkR_2), exp(g, ldhR_2), psk_2)))
+                | (!
+                   (Responder(kemltkR_2, ldhR_2, pk(kemltkI_2), exp(g, ldhI_2), psk_2)))))
+              | (RevealKEMLtk(kemltkI_2))))
+            | (RevealKEMLtk(kemltkR_2))))
+          | (RevealLDH(ldhI_2))))
+        | (RevealLDH(ldhR_2))))
+      | (RevealPRE(ldhI_2, ldhR_2))))
+    | (RevealPsk(psk_2))))
+
+(*
+All wellformedness checks were successful.
+*)
+
+(*
+Generated from:
+Tamarin version 1.10.0
+Maude version 3.5
+Git revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master
+Compiled at: 2024-10-30 11:11:02.432289291 UTC
+*)
+
+(*
+All wellformedness checks were successful.
+*)
+
+(*
+Generated from:
+Tamarin version 1.10.0
+Maude version 3.5
+Git revision: cb62c305f8c8b8c1e664152aa33c95b7b8d5ef32, branch: master
+Compiled at: 2024-10-30 11:11:02.432289291 UTC
+*)

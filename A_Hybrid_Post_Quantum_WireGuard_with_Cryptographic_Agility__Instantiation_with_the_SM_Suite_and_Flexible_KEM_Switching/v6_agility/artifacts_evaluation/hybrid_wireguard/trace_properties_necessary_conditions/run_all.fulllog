@@ -1,0 +1,12 @@
+Generate ProVerif files for adversary with 'read' access to cryptographic keys
+Execution time: 00:00:01 (hh:mm:ss)
+Evaluate ProVerif files for adversary with 'read' access to cryptographic keys
+Execution time: 00:16:24 (hh:mm:ss)
+Generate ProVerif files for adversary with 'write' access to cryptographic keys
+Execution time: 00:00:00 (hh:mm:ss)
+Evaluate ProVerif files for adversary with 'write' access to cryptographic keys
+Execution time: 00:00:00 (hh:mm:ss)
+Generate CNF and DNF, see results.cnfdnf file
+Execution time: 00:00:02 (hh:mm:ss)
+Evaluate Tamarin files
+Execution time: 00:02:59 (hh:mm:ss)

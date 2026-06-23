@@ -1,0 +1,922 @@
+Linear part:
+exp(exp(g,a),b) = exp(exp(g,b),a)
+Completing equations...
+Completed equations:
+exp(exp(g,a),b) = exp(exp(g,b),a)
+Convergent part:
+sdec(senc(x_1,x_2),x_2) = x_1
+adec(aenc(x_1,pk(x_2)),x_2) = x_1
+fst((x_1,x_2)) = x_1
+snd((x_1,x_2)) = x_2
+Completing equations...
+Completed equations:
+snd((x_1,x_2)) = x_2
+fst((x_1,x_2)) = x_1
+adec(aenc(x_1,pk(x_2)),x_2) = x_1
+sdec(senc(x_1,x_2),x_2) = x_1
+Process 0 (that is, the initial process):
+{1}!
+{2}new ldhI_2: bitstring;
+{3}new ldhR_2: bitstring;
+{4}new kemltkI_2: bitstring;
+{5}new kemltkR_2: bitstring;
+{6}new psk_2: bitstring;
+{7}out(att, (sinitiator,(pk(kemltkI_2),exp(g,ldhI_2))));
+{8}out(att, (sresponder,(pk(kemltkR_2),exp(g,ldhR_2))));
+(
+    {9}!
+    {10}let kemltkI: bitstring = kemltkI_2 in
+    {11}let ldhI: bitstring = ldhI_2 in
+    {12}let kempkR_2: bitstring = pk(kemltkR_2) in
+    {13}let dhpkR_2: bitstring = exp(g,ldhR_2) in
+    {14}let psk: bitstring = psk_2 in
+    {15}let dhpkI_2: bitstring = exp(g,ldhI) in
+    {16}let kempkI_2: bitstring = pk(kemltkI) in
+    {17}new dhekI_2[]: bitstring;
+    {18}new rb_2[]: bitstring;
+    {19}new kemekI_2[]: bitstring;
+    {20}new ts_2[]: bitstring;
+    {21}new sidI_2[]: bitstring;
+    {22}new firstI_2[]: bitstring;
+    {23}let sisr_2: bitstring = exp(dhpkR_2,ldhI) in
+    {24}let kempekI_2: bitstring = pk(kemekI_2) in
+    (
+        {25}let kb_2: bitstring = h(rb_2) in
+        {26}let dhpekI_2: bitstring = exp(g,dhekI_2) in
+        {27}let ck_2: bitstring = h(snoise) in
+        {28}let eisr_2: bitstring = exp(dhpkR_2,dhekI_2) in
+        {29}let hi0_2: bitstring = h((ck_2,sident)) in
+        {30}let hi1_2: bitstring = h((hi0_2,(dhpkR_2,kempkR_2))) in
+        {31}let ci0_2: bitstring = kdf1((ck_2,(dhpekI_2,kempekI_2))) in
+        {32}let ct1_2: bitstring = aenc(kb_2,kempkR_2) in
+        {33}let ct1_enc_2: bitstring = senc(ct1_2,h(eisr_2)) in
+        {34}let hi2_2: bitstring = h((hi1_2,(dhpekI_2,kempekI_2))) in
+        {35}let ci1_2: bitstring = kdf1((ci0_2,(eisr_2,kb_2))) in
+        {36}let ki1_2: bitstring = kdf2((ci0_2,(eisr_2,kb_2))) in
+        {37}let astat_2: bitstring = aead(ki1_2,szerostring,hi2_2,h((kempkI_2,dhpkI_2))) in
+        {38}let hi3_2: bitstring = h((hi2_2,astat_2)) in
+        {39}let ci2_2: bitstring = kdf1((ci1_2,(sisr_2,h((kempkI_2,kempkR_2))))) in
+        {40}let ki2_2: bitstring = kdf2((ci1_2,(sisr_2,h((kempkI_2,kempkR_2))))) in
+        {41}let ats_2: bitstring = aead(ki2_2,szerostring,hi3_2,ts_2) in
+        {42}let hi4_2: bitstring = h((hi3_2,ats_2)) in
+        {43}let kmacI1_2: bitstring = h((snoise,(kempkR_2,psk))) in
+        {44}let macI1_2: bitstring = mac(kmacI1_2,(sidI_2,(dhpekI_2,(kempekI_2,(ct1_enc_2,(astat_2,ats_2)))))) in
+        {45}event eISend(ki2_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,psk,kb_2);
+        {46}out(att, (sxI,(sidI_2,(dhpekI_2,(kempekI_2,(ct1_enc_2,(astat_2,(ats_2,macI1_2))))))));
+        {47}let kmacR_2: bitstring = h((snoise,(kempkI_2,psk))) in
+        {48}in(att, (=sxR,(sidIR_2: bitstring,(sidR_2: bitstring,(dhpekR_2: bitstring,(ct2_2: bitstring,(ct3_enc_2: bitstring,(aempt_2: bitstring,macR_2: bitstring))))))));
+        {49}if (dhpekR_2 ≠ g) then
+        {50}if (sidIR_2 = sidI_2) then
+        {51}if (checkmac(kmacR_2,(sidIR_2,(sidR_2,(dhpekR_2,(ct2_2,(ct3_enc_2,aempt_2))))),macR_2) = okay) then
+        {52}let eier_2: bitstring = exp(dhpekR_2,dhekI_2) in
+        {53}let sier_2: bitstring = exp(dhpekR_2,ldhI) in
+        {54}let ke_2: bitstring = adec(ct2_2,kemekI_2) in
+        {55}let ct3_2: bitstring = sdec(ct3_enc_2,h(sier_2)) in
+        {56}let ka_2: bitstring = adec(ct3_2,kemltkI) in
+        {57}let ci3_2: bitstring = kdf1((ci2_2,(dhpekR_2,ct2_2))) in
+        {58}let hi5_2: bitstring = h((hi4_2,(dhpekR_2,ct2_2))) in
+        {59}let ci4_2: bitstring = kdf1((ci3_2,(eier_2,ke_2))) in
+        {60}let ci5_2: bitstring = kdf1((ci4_2,(sier_2,ka_2))) in
+        {61}let ci6_2: bitstring = kdf1((ci5_2,psk)) in
+        {62}let hit_2: bitstring = kdf2((ci5_2,psk)) in
+        {63}let ki6_2: bitstring = kdf3((ci5_2,psk)) in
+        {64}let hi6_2: bitstring = h((hi5_2,hit_2)) in
+        {65}let dempty_2: bitstring = decrypt(ki6_2,szerostring,aempt_2) in
+        {66}if (checkaead(ki6_2,szerostring,hi6_2,aempt_2) = okay) then
+        {67}if (dempty_2 = sempty) then
+        {68}event eIKeys(ki6_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {69}let hi7_2: bitstring = h((hi6_2,aempt_2)) in
+        {70}let ci7_2: bitstring = kdf1(ci6_2) in
+        {71}let ki7_2: bitstring = kdf2(ci6_2) in
+        {72}event eI_SK7(ki7_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {73}let keyItoR_2: bitstring = kdf1(ki7_2) in
+        {74}event eI_SK_ItoR(keyItoR_2,kempkI_2,kempkR_2,kempekI_2,psk,rb_2);
+        {75}let keyRtoI_2: bitstring = kdf2(ki7_2) in
+        {76}event eI_SK_RtoI(keyRtoI_2,kempkI_2,kempkR_2,kempekI_2,psk,rb_2);
+        {77}let confirmI_2: bitstring = aead(keyItoR_2,szerostring,sempty,firstI_2) in
+        {78}event eIConfirm(keyItoR_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {79}out(att, (sxTi0,(sidR_2,(szerostring,confirmI_2))))
+    ) | (
+        {80}let dhe_2: bitstring = dhekI_2 in
+        {81}event eRevDHE(exp(g,dhe_2));
+        {82}out(att, dhe_2)
+    ) | (
+        {83}let kemeki_2: bitstring = kemekI_2 in
+        {84}event eRevKEMEki(pk(kemeki_2));
+        {85}out(att, kemeki_2)
+    ) | (
+        {86}let rb: bitstring = rb_2 in
+        {87}event eRevRb(rb);
+        {88}out(att, rb)
+    )
+) | (
+    {89}!
+    {90}let kemltkR: bitstring = kemltkR_2 in
+    {91}let ldhR: bitstring = ldhR_2 in
+    {92}let kempkI: bitstring = pk(kemltkI_2) in
+    {93}let dhpkI: bitstring = exp(g,ldhI_2) in
+    {94}let psk_1: bitstring = psk_2 in
+    {95}let dhpkR: bitstring = exp(g,ldhR) in
+    {96}let kempkR: bitstring = pk(kemltkR) in
+    {97}new re_2[]: bitstring;
+    {98}new ra_2[]: bitstring;
+    {99}new sidR[]: bitstring;
+    {100}new dhekR_2[]: bitstring;
+    {101}let dhpekR: bitstring = exp(g,dhekR_2) in
+    {102}let ka: bitstring = h(ra_2) in
+    {103}let ke: bitstring = h(re_2) in
+    {104}let srsi_2: bitstring = exp(dhpkI,ldhR) in
+    (
+        {105}let ck: bitstring = h(snoise) in
+        {106}in(att, (=sxI,(sidI: bitstring,(dhpekI: bitstring,(kempekI: bitstring,(ct1_enc: bitstring,(astat: bitstring,(ats: bitstring,macI1: bitstring))))))));
+        {107}let eisr: bitstring = exp(dhpekI,ldhR) in
+        {108}let hr0_2: bitstring = h((ck,sident)) in
+        {109}let hr1_2: bitstring = h((hr0_2,(dhpkR,kempkR))) in
+        {110}let cr0_2: bitstring = kdf1((ck,(dhpekI,kempekI))) in
+        {111}let hr2_2: bitstring = h((hr1_2,(dhpekI,kempekI))) in
+        {112}let ct1: bitstring = sdec(ct1_enc,h(eisr)) in
+        {113}let kb: bitstring = adec(ct1,kemltkR) in
+        {114}let cr1_2: bitstring = kdf1((cr0_2,(eisr,kb))) in
+        {115}let kr1_2: bitstring = kdf2((cr0_2,(eisr,kb))) in
+        {116}let hpkikem_2: bitstring = decrypt(kr1_2,szerostring,astat) in
+        {117}if (dhpekI ≠ g) then
+        {118}if (checkaead(kr1_2,szerostring,hr2_2,astat) = okay) then
+        {119}let kmacI1: bitstring = h((snoise,(kempkR,psk_1))) in
+        {120}if (checkmac(kmacI1,(sidI,(dhpekI,(kempekI,(ct1,(astat,ats))))),macI1) = okay) then
+        {121}if (hpkikem_2 = h((kempkI,dhpkI))) then
+        {122}let ct3: bitstring = aenc(ka,kempkI) in
+        {123}let hr3_2: bitstring = h((hr2_2,astat)) in
+        {124}let cr2_2: bitstring = kdf1((cr1_2,(srsi_2,h((kempkI,kempkR))))) in
+        {125}let kr2_2: bitstring = kdf2((cr1_2,(srsi_2,h((kempkI,kempkR))))) in
+        {126}let dtime_2: bitstring = decrypt(kr2_2,szerostring,ats) in
+        {127}if (checkaead(kr2_2,szerostring,hr3_2,ats) = okay) then
+        {128}let hr4_2: bitstring = h((hr3_2,ats)) in
+        {129}event eRRec(kr2_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {130}let eier: bitstring = exp(dhpekI,dhekR_2) in
+        {131}let sier: bitstring = exp(dhpkI,dhekR_2) in
+        {132}let ct2: bitstring = aenc(ke,kempekI) in
+        {133}let ct3_enc: bitstring = senc(ct3,h(sier)) in
+        {134}let cr3_2: bitstring = kdf1((cr2_2,(dhpekR,ct2))) in
+        {135}let hr5_2: bitstring = h((hr4_2,(dhpekR,ct2))) in
+        {136}let cr4_2: bitstring = kdf1((cr3_2,(eier,ke))) in
+        {137}let cr5_2: bitstring = kdf1((cr4_2,(sier,ka))) in
+        {138}let cr6_2: bitstring = kdf1((cr5_2,psk_1)) in
+        {139}let hrt_2: bitstring = kdf2((cr5_2,psk_1)) in
+        {140}let kr6_2: bitstring = kdf3((cr5_2,psk_1)) in
+        {141}let hr6_2: bitstring = h((hr5_2,hrt_2)) in
+        {142}let aempt: bitstring = aead(kr6_2,szerostring,hr6_2,sempty) in
+        {143}let hr7_2: bitstring = h((hr6_2,aempt)) in
+        {144}let kmacR: bitstring = h((snoise,(kempkI,psk_1))) in
+        {145}let macR: bitstring = mac(kmacR,(sidI,(sidR,(dhpekR,(ct2,(ct3_enc,aempt)))))) in
+        {146}event eRKeys(kr6_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {147}out(att, (sxR,(sidI,(sidR,(dhpekR,(ct2,(ct3_enc,(aempt,macR))))))));
+        {148}let cr7_2: bitstring = kdf1(cr6_2) in
+        {149}let kr7_2: bitstring = kdf2(cr6_2) in
+        {150}event eR_SK7(kr7_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {151}let keyItoR: bitstring = kdf1(kr7_2) in
+        {152}event eR_SK_ItoR(keyItoR,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,kb,ka,ke);
+        {153}let keyRtoI: bitstring = kdf2(kr7_2) in
+        {154}event eR_SK_RtoI(keyRtoI,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,kb,ka,ke);
+        {155}in(att, (=sxTi0,(sidC_2: bitstring,(cI0_2: bitstring,confirmI: bitstring))));
+        {156}if (sidC_2 = sidR) then
+        {157}if (cI0_2 = szerostring) then
+        {158}let dfirstI_2: bitstring = decrypt(keyItoR,cI0_2,confirmI) in
+        {159}if (checkaead(keyItoR,cI0_2,sempty,confirmI) = okay) then
+        {160}event eRConfirm(keyItoR,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke)
+    ) | (
+        {161}let dhe: bitstring = dhekR_2 in
+        {162}event eRevDHE(exp(g,dhe));
+        {163}out(att, dhe)
+    ) | (
+        {164}let ra: bitstring = ra_2 in
+        {165}event eRevRa(ra);
+        {166}out(att, ra)
+    ) | (
+        {167}let re: bitstring = re_2 in
+        {168}event eRevRe(re);
+        {169}out(att, re)
+    )
+) | (
+    {170}let kemltkr_2: bitstring = kemltkI_2 in
+    {171}event eRevKEMLtk(pk(kemltkr_2));
+    {172}out(att, kemltkr_2)
+) | (
+    {173}let kemltkr: bitstring = kemltkR_2 in
+    {174}event eRevKEMLtk(pk(kemltkr));
+    {175}out(att, kemltkr)
+) | (
+    {176}let ldh_2: bitstring = ldhI_2 in
+    {177}event eRevLDH(exp(g,ldh_2));
+    {178}out(att, ldh_2)
+) | (
+    {179}let ldh: bitstring = ldhR_2 in
+    {180}event eRevLDH(exp(g,ldh));
+    {181}out(att, ldh)
+) | (
+    {182}let ldha_2: bitstring = ldhI_2 in
+    {183}let ldhb_2: bitstring = ldhR_2 in
+    {184}event eRevPre(exp(g,ldha_2),exp(g,ldhb_2));
+    {185}out(att, exp(exp(g,ldha_2),ldhb_2))
+) | (
+    {186}let psk_3: bitstring = psk_2 in
+    {187}event eRevPsk(psk_3);
+    {188}out(att, psk_3)
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}!
+{2}new ldhI_2: bitstring;
+{3}new ldhR_2: bitstring;
+{4}new kemltkI_2: bitstring;
+{5}new kemltkR_2: bitstring;
+{6}new psk_2: bitstring;
+{7}out(att, (sinitiator,(pk(kemltkI_2),exp(g,ldhI_2))));
+{8}out(att, (sresponder,(pk(kemltkR_2),exp(g,ldhR_2))));
+(
+    {9}!
+    {17}new dhekI_2[]: bitstring;
+    {18}new rb_2[]: bitstring;
+    {19}new kemekI_2[]: bitstring;
+    {20}new ts_2[]: bitstring;
+    {21}new sidI_2[]: bitstring;
+    {22}new firstI_2[]: bitstring;
+    (
+        {27}let ck_2: bitstring = h(snoise) in
+        {26}let dhpekI_2: bitstring = exp(g,dhekI_2) in
+        {24}let kempekI_2: bitstring = pk(kemekI_2) in
+        {31}let ci0_2: bitstring = kdf1((ck_2,(dhpekI_2,kempekI_2))) in
+        {13}let dhpkR_2: bitstring = exp(g,ldhR_2) in
+        {28}let eisr_2: bitstring = exp(dhpkR_2,dhekI_2) in
+        {25}let kb_2: bitstring = h(rb_2) in
+        {35}let ci1_2: bitstring = kdf1((ci0_2,(eisr_2,kb_2))) in
+        {11}let ldhI: bitstring = ldhI_2 in
+        {23}let sisr_2: bitstring = exp(dhpkR_2,ldhI) in
+        {10}let kemltkI: bitstring = kemltkI_2 in
+        {16}let kempkI_2: bitstring = pk(kemltkI) in
+        {12}let kempkR_2: bitstring = pk(kemltkR_2) in
+        {40}let ki2_2: bitstring = kdf2((ci1_2,(sisr_2,h((kempkI_2,kempkR_2))))) in
+        {15}let dhpkI_2: bitstring = exp(g,ldhI) in
+        {14}let psk: bitstring = psk_2 in
+        {45}event eISend(ki2_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,psk,kb_2);
+        {43}let kmacI1_2: bitstring = h((snoise,(kempkR_2,psk))) in
+        {36}let ki1_2: bitstring = kdf2((ci0_2,(eisr_2,kb_2))) in
+        {29}let hi0_2: bitstring = h((ck_2,sident)) in
+        {30}let hi1_2: bitstring = h((hi0_2,(dhpkR_2,kempkR_2))) in
+        {34}let hi2_2: bitstring = h((hi1_2,(dhpekI_2,kempekI_2))) in
+        {37}let astat_2: bitstring = aead(ki1_2,szerostring,hi2_2,h((kempkI_2,dhpkI_2))) in
+        {38}let hi3_2: bitstring = h((hi2_2,astat_2)) in
+        {41}let ats_2: bitstring = aead(ki2_2,szerostring,hi3_2,ts_2) in
+        {32}let ct1_2: bitstring = aenc(kb_2,kempkR_2) in
+        {33}let ct1_enc_2: bitstring = senc(ct1_2,h(eisr_2)) in
+        {44}let macI1_2: bitstring = mac(kmacI1_2,(sidI_2,(dhpekI_2,(kempekI_2,(ct1_enc_2,(astat_2,ats_2)))))) in
+        {46}out(att, (sxI,(sidI_2,(dhpekI_2,(kempekI_2,(ct1_enc_2,(astat_2,(ats_2,macI1_2))))))));
+        {48}in(att, (=sxR,(sidIR_2: bitstring,(sidR_2: bitstring,(dhpekR_2: bitstring,(ct2_2: bitstring,(ct3_enc_2: bitstring,(aempt_2: bitstring,macR_2: bitstring))))))));
+        {49}if (dhpekR_2 ≠ g) then
+        {50}if (sidIR_2 = sidI_2) then
+        {47}let kmacR_2: bitstring = h((snoise,(kempkI_2,psk))) in
+        {51}if (checkmac(kmacR_2,(sidIR_2,(sidR_2,(dhpekR_2,(ct2_2,(ct3_enc_2,aempt_2))))),macR_2) = okay) then
+        {39}let ci2_2: bitstring = kdf1((ci1_2,(sisr_2,h((kempkI_2,kempkR_2))))) in
+        {57}let ci3_2: bitstring = kdf1((ci2_2,(dhpekR_2,ct2_2))) in
+        {54}let ke_2: bitstring = adec(ct2_2,kemekI_2) in
+        {52}let eier_2: bitstring = exp(dhpekR_2,dhekI_2) in
+        {59}let ci4_2: bitstring = kdf1((ci3_2,(eier_2,ke_2))) in
+        {53}let sier_2: bitstring = exp(dhpekR_2,ldhI) in
+        {55}let ct3_2: bitstring = sdec(ct3_enc_2,h(sier_2)) in
+        {56}let ka_2: bitstring = adec(ct3_2,kemltkI) in
+        {60}let ci5_2: bitstring = kdf1((ci4_2,(sier_2,ka_2))) in
+        {63}let ki6_2: bitstring = kdf3((ci5_2,psk)) in
+        {65}let dempty_2: bitstring = decrypt(ki6_2,szerostring,aempt_2) in
+        {62}let hit_2: bitstring = kdf2((ci5_2,psk)) in
+        {42}let hi4_2: bitstring = h((hi3_2,ats_2)) in
+        {58}let hi5_2: bitstring = h((hi4_2,(dhpekR_2,ct2_2))) in
+        {64}let hi6_2: bitstring = h((hi5_2,hit_2)) in
+        {66}if (checkaead(ki6_2,szerostring,hi6_2,aempt_2) = okay) then
+        {67}if (dempty_2 = sempty) then
+        {68}event eIKeys(ki6_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {61}let ci6_2: bitstring = kdf1((ci5_2,psk)) in
+        {71}let ki7_2: bitstring = kdf2(ci6_2) in
+        {72}event eI_SK7(ki7_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {73}let keyItoR_2: bitstring = kdf1(ki7_2) in
+        {74}event eI_SK_ItoR(keyItoR_2,kempkI_2,kempkR_2,kempekI_2,psk,rb_2);
+        {75}let keyRtoI_2: bitstring = kdf2(ki7_2) in
+        {76}event eI_SK_RtoI(keyRtoI_2,kempkI_2,kempkR_2,kempekI_2,psk,rb_2);
+        {78}event eIConfirm(keyItoR_2,kempkI_2,kempkR_2,dhpkI_2,dhpkR_2,kempekI_2,dhpekI_2,dhpekR_2,psk,kb_2,ka_2,ke_2);
+        {77}let confirmI_2: bitstring = aead(keyItoR_2,szerostring,sempty,firstI_2) in
+        {79}out(att, (sxTi0,(sidR_2,(szerostring,confirmI_2))))
+    ) | (
+        {80}let dhe_2: bitstring = dhekI_2 in
+        {81}event eRevDHE(exp(g,dhe_2));
+        {82}out(att, dhe_2)
+    ) | (
+        {83}let kemeki_2: bitstring = kemekI_2 in
+        {84}event eRevKEMEki(pk(kemeki_2));
+        {85}out(att, kemeki_2)
+    ) | (
+        {86}let rb: bitstring = rb_2 in
+        {87}event eRevRb(rb);
+        {88}out(att, rb)
+    )
+) | (
+    {89}!
+    {97}new re_2[]: bitstring;
+    {98}new ra_2[]: bitstring;
+    {99}new sidR[]: bitstring;
+    {100}new dhekR_2[]: bitstring;
+    (
+        {106}in(att, (=sxI,(sidI: bitstring,(dhpekI: bitstring,(kempekI: bitstring,(ct1_enc: bitstring,(astat: bitstring,(ats: bitstring,macI1: bitstring))))))));
+        {91}let ldhR: bitstring = ldhR_2 in
+        {107}let eisr: bitstring = exp(dhpekI,ldhR) in
+        {112}let ct1: bitstring = sdec(ct1_enc,h(eisr)) in
+        {90}let kemltkR: bitstring = kemltkR_2 in
+        {113}let kb: bitstring = adec(ct1,kemltkR) in
+        {105}let ck: bitstring = h(snoise) in
+        {110}let cr0_2: bitstring = kdf1((ck,(dhpekI,kempekI))) in
+        {115}let kr1_2: bitstring = kdf2((cr0_2,(eisr,kb))) in
+        {116}let hpkikem_2: bitstring = decrypt(kr1_2,szerostring,astat) in
+        {117}if (dhpekI ≠ g) then
+        {108}let hr0_2: bitstring = h((ck,sident)) in
+        {96}let kempkR: bitstring = pk(kemltkR) in
+        {95}let dhpkR: bitstring = exp(g,ldhR) in
+        {109}let hr1_2: bitstring = h((hr0_2,(dhpkR,kempkR))) in
+        {111}let hr2_2: bitstring = h((hr1_2,(dhpekI,kempekI))) in
+        {118}if (checkaead(kr1_2,szerostring,hr2_2,astat) = okay) then
+        {94}let psk_1: bitstring = psk_2 in
+        {119}let kmacI1: bitstring = h((snoise,(kempkR,psk_1))) in
+        {120}if (checkmac(kmacI1,(sidI,(dhpekI,(kempekI,(ct1,(astat,ats))))),macI1) = okay) then
+        {93}let dhpkI: bitstring = exp(g,ldhI_2) in
+        {92}let kempkI: bitstring = pk(kemltkI_2) in
+        {121}if (hpkikem_2 = h((kempkI,dhpkI))) then
+        {114}let cr1_2: bitstring = kdf1((cr0_2,(eisr,kb))) in
+        {104}let srsi_2: bitstring = exp(dhpkI,ldhR) in
+        {125}let kr2_2: bitstring = kdf2((cr1_2,(srsi_2,h((kempkI,kempkR))))) in
+        {126}let dtime_2: bitstring = decrypt(kr2_2,szerostring,ats) in
+        {123}let hr3_2: bitstring = h((hr2_2,astat)) in
+        {127}if (checkaead(kr2_2,szerostring,hr3_2,ats) = okay) then
+        {103}let ke: bitstring = h(re_2) in
+        {102}let ka: bitstring = h(ra_2) in
+        {101}let dhpekR: bitstring = exp(g,dhekR_2) in
+        {129}event eRRec(kr2_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {132}let ct2: bitstring = aenc(ke,kempekI) in
+        {124}let cr2_2: bitstring = kdf1((cr1_2,(srsi_2,h((kempkI,kempkR))))) in
+        {134}let cr3_2: bitstring = kdf1((cr2_2,(dhpekR,ct2))) in
+        {130}let eier: bitstring = exp(dhpekI,dhekR_2) in
+        {136}let cr4_2: bitstring = kdf1((cr3_2,(eier,ke))) in
+        {131}let sier: bitstring = exp(dhpkI,dhekR_2) in
+        {137}let cr5_2: bitstring = kdf1((cr4_2,(sier,ka))) in
+        {140}let kr6_2: bitstring = kdf3((cr5_2,psk_1)) in
+        {146}event eRKeys(kr6_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {144}let kmacR: bitstring = h((snoise,(kempkI,psk_1))) in
+        {139}let hrt_2: bitstring = kdf2((cr5_2,psk_1)) in
+        {128}let hr4_2: bitstring = h((hr3_2,ats)) in
+        {135}let hr5_2: bitstring = h((hr4_2,(dhpekR,ct2))) in
+        {141}let hr6_2: bitstring = h((hr5_2,hrt_2)) in
+        {142}let aempt: bitstring = aead(kr6_2,szerostring,hr6_2,sempty) in
+        {122}let ct3: bitstring = aenc(ka,kempkI) in
+        {133}let ct3_enc: bitstring = senc(ct3,h(sier)) in
+        {145}let macR: bitstring = mac(kmacR,(sidI,(sidR,(dhpekR,(ct2,(ct3_enc,aempt)))))) in
+        {147}out(att, (sxR,(sidI,(sidR,(dhpekR,(ct2,(ct3_enc,(aempt,macR))))))));
+        {138}let cr6_2: bitstring = kdf1((cr5_2,psk_1)) in
+        {149}let kr7_2: bitstring = kdf2(cr6_2) in
+        {150}event eR_SK7(kr7_2,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke);
+        {151}let keyItoR: bitstring = kdf1(kr7_2) in
+        {152}event eR_SK_ItoR(keyItoR,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,kb,ka,ke);
+        {153}let keyRtoI: bitstring = kdf2(kr7_2) in
+        {154}event eR_SK_RtoI(keyRtoI,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,kb,ka,ke);
+        {155}in(att, (=sxTi0,(sidC_2: bitstring,(cI0_2: bitstring,confirmI: bitstring))));
+        {156}if (sidC_2 = sidR) then
+        {157}if (cI0_2 = szerostring) then
+        {158}let dfirstI_2: bitstring = decrypt(keyItoR,cI0_2,confirmI) in
+        {159}if (checkaead(keyItoR,cI0_2,sempty,confirmI) = okay) then
+        {160}event eRConfirm(keyItoR,kempkI,kempkR,dhpkI,dhpkR,kempekI,dhpekI,dhpekR,psk_1,kb,ka,ke)
+    ) | (
+        {161}let dhe: bitstring = dhekR_2 in
+        {162}event eRevDHE(exp(g,dhe));
+        {163}out(att, dhe)
+    ) | (
+        {164}let ra: bitstring = ra_2 in
+        {165}event eRevRa(ra);
+        {166}out(att, ra)
+    ) | (
+        {167}let re: bitstring = re_2 in
+        {168}event eRevRe(re);
+        {169}out(att, re)
+    )
+) | (
+    {170}let kemltkr_2: bitstring = kemltkI_2 in
+    {171}event eRevKEMLtk(pk(kemltkr_2));
+    {172}out(att, kemltkr_2)
+) | (
+    {173}let kemltkr: bitstring = kemltkR_2 in
+    {174}event eRevKEMLtk(pk(kemltkr));
+    {175}out(att, kemltkr)
+) | (
+    {176}let ldh_2: bitstring = ldhI_2 in
+    {177}event eRevLDH(exp(g,ldh_2));
+    {178}out(att, ldh_2)
+) | (
+    {179}let ldh: bitstring = ldhR_2 in
+    {180}event eRevLDH(exp(g,ldh));
+    {181}out(att, ldh)
+) | (
+    {183}let ldhb_2: bitstring = ldhR_2 in
+    {182}let ldha_2: bitstring = ldhI_2 in
+    {184}event eRevPre(exp(g,ldha_2),exp(g,ldhb_2));
+    {185}out(att, exp(exp(g,ldha_2),ldhb_2))
+) | (
+    {186}let psk_3: bitstring = psk_2 in
+    {187}event eRevPsk(psk_3);
+    {188}out(att, psk_3)
+)
+
+Declared: select attacker(senc(*x,h(*y)))/-6000 [ignoreAFewTimes,hypothesis]
+Declared: select attacker(h(x))/-6000
+Declared: select attacker(exp(g,x))/-6000
+-- Query event(eRConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(ck_1) ==> event(eRevRe(re_1)) || event(eRevKEMEki(kempeki)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+200 rules inserted. Base: 200 rules (57 with conclusion selected). Queue: 418 rules.
+400 rules inserted. Base: 400 rules (62 with conclusion selected). Queue: 414 rules.
+600 rules inserted. Base: 598 rules (70 with conclusion selected). Queue: 404 rules.
+800 rules inserted. Base: 798 rules (70 with conclusion selected). Queue: 453 rules.
+1000 rules inserted. Base: 998 rules (70 with conclusion selected). Queue: 472 rules.
+1200 rules inserted. Base: 1172 rules (70 with conclusion selected). Queue: 472 rules.
+1400 rules inserted. Base: 1344 rules (70 with conclusion selected). Queue: 473 rules.
+1600 rules inserted. Base: 1544 rules (70 with conclusion selected). Queue: 488 rules.
+1800 rules inserted. Base: 1744 rules (70 with conclusion selected). Queue: 524 rules.
+2000 rules inserted. Base: 1937 rules (70 with conclusion selected). Queue: 523 rules.
+2200 rules inserted. Base: 2137 rules (70 with conclusion selected). Queue: 523 rules.
+2400 rules inserted. Base: 2292 rules (70 with conclusion selected). Queue: 523 rules.
+2600 rules inserted. Base: 2329 rules (70 with conclusion selected). Queue: 522 rules.
+2800 rules inserted. Base: 2492 rules (70 with conclusion selected). Queue: 522 rules.
+3000 rules inserted. Base: 2689 rules (70 with conclusion selected). Queue: 521 rules.
+3200 rules inserted. Base: 2863 rules (70 with conclusion selected). Queue: 521 rules.
+3400 rules inserted. Base: 2985 rules (70 with conclusion selected). Queue: 521 rules.
+3600 rules inserted. Base: 3180 rules (70 with conclusion selected). Queue: 520 rules.
+3800 rules inserted. Base: 3325 rules (70 with conclusion selected). Queue: 520 rules.
+4000 rules inserted. Base: 3423 rules (70 with conclusion selected). Queue: 519 rules.
+4200 rules inserted. Base: 3453 rules (70 with conclusion selected). Queue: 519 rules.
+4400 rules inserted. Base: 3555 rules (70 with conclusion selected). Queue: 519 rules.
+4600 rules inserted. Base: 3736 rules (70 with conclusion selected). Queue: 518 rules.
+4800 rules inserted. Base: 3905 rules (70 with conclusion selected). Queue: 526 rules.
+5000 rules inserted. Base: 4043 rules (70 with conclusion selected). Queue: 534 rules.
+5200 rules inserted. Base: 4040 rules (70 with conclusion selected). Queue: 534 rules.
+5400 rules inserted. Base: 4060 rules (70 with conclusion selected). Queue: 534 rules.
+5600 rules inserted. Base: 4226 rules (70 with conclusion selected). Queue: 534 rules.
+5800 rules inserted. Base: 4398 rules (94 with conclusion selected). Queue: 546 rules.
+6000 rules inserted. Base: 4503 rules (118 with conclusion selected). Queue: 558 rules.
+6200 rules inserted. Base: 4680 rules (118 with conclusion selected). Queue: 558 rules.
+6400 rules inserted. Base: 4773 rules (118 with conclusion selected). Queue: 584 rules.
+6600 rules inserted. Base: 4897 rules (118 with conclusion selected). Queue: 646 rules.
+6800 rules inserted. Base: 5093 rules (119 with conclusion selected). Queue: 656 rules.
+7000 rules inserted. Base: 5235 rules (120 with conclusion selected). Queue: 726 rules.
+7200 rules inserted. Base: 5333 rules (122 with conclusion selected). Queue: 762 rules.
+7400 rules inserted. Base: 5502 rules (122 with conclusion selected). Queue: 779 rules.
+7600 rules inserted. Base: 5583 rules (122 with conclusion selected). Queue: 764 rules.
+7800 rules inserted. Base: 5673 rules (122 with conclusion selected). Queue: 750 rules.
+8000 rules inserted. Base: 5724 rules (123 with conclusion selected). Queue: 748 rules.
+8200 rules inserted. Base: 5897 rules (123 with conclusion selected). Queue: 748 rules.
+8400 rules inserted. Base: 5908 rules (123 with conclusion selected). Queue: 756 rules.
+8600 rules inserted. Base: 5949 rules (123 with conclusion selected). Queue: 789 rules.
+8800 rules inserted. Base: 6074 rules (123 with conclusion selected). Queue: 798 rules.
+9000 rules inserted. Base: 6215 rules (123 with conclusion selected). Queue: 800 rules.
+9200 rules inserted. Base: 6246 rules (123 with conclusion selected). Queue: 804 rules.
+9400 rules inserted. Base: 6279 rules (123 with conclusion selected). Queue: 809 rules.
+9600 rules inserted. Base: 6274 rules (123 with conclusion selected). Queue: 810 rules.
+9800 rules inserted. Base: 6286 rules (123 with conclusion selected). Queue: 810 rules.
+10000 rules inserted. Base: 6367 rules (123 with conclusion selected). Queue: 810 rules.
+10200 rules inserted. Base: 6424 rules (123 with conclusion selected). Queue: 810 rules.
+10400 rules inserted. Base: 6534 rules (123 with conclusion selected). Queue: 810 rules.
+10600 rules inserted. Base: 6668 rules (129 with conclusion selected). Queue: 812 rules.
+10800 rules inserted. Base: 6676 rules (139 with conclusion selected). Queue: 818 rules.
+11000 rules inserted. Base: 6682 rules (153 with conclusion selected). Queue: 824 rules.
+11200 rules inserted. Base: 6726 rules (155 with conclusion selected). Queue: 826 rules.
+11400 rules inserted. Base: 6772 rules (159 with conclusion selected). Queue: 826 rules.
+11600 rules inserted. Base: 6809 rules (171 with conclusion selected). Queue: 826 rules.
+11800 rules inserted. Base: 6838 rules (183 with conclusion selected). Queue: 826 rules.
+12000 rules inserted. Base: 6884 rules (187 with conclusion selected). Queue: 842 rules.
+12200 rules inserted. Base: 7015 rules (187 with conclusion selected). Queue: 954 rules.
+12400 rules inserted. Base: 7044 rules (187 with conclusion selected). Queue: 962 rules.
+12600 rules inserted. Base: 7074 rules (187 with conclusion selected). Queue: 969 rules.
+12800 rules inserted. Base: 7099 rules (187 with conclusion selected). Queue: 978 rules.
+13000 rules inserted. Base: 7296 rules (187 with conclusion selected). Queue: 1065 rules.
+13200 rules inserted. Base: 7315 rules (187 with conclusion selected). Queue: 1112 rules.
+13400 rules inserted. Base: 7224 rules (187 with conclusion selected). Queue: 1073 rules.
+13600 rules inserted. Base: 7041 rules (187 with conclusion selected). Queue: 1029 rules.
+13800 rules inserted. Base: 7114 rules (187 with conclusion selected). Queue: 1058 rules.
+14000 rules inserted. Base: 7230 rules (187 with conclusion selected). Queue: 1126 rules.
+14200 rules inserted. Base: 7320 rules (194 with conclusion selected). Queue: 1174 rules.
+14400 rules inserted. Base: 7033 rules (211 with conclusion selected). Queue: 1152 rules.
+14600 rules inserted. Base: 7046 rules (235 with conclusion selected). Queue: 1124 rules.
+14800 rules inserted. Base: 6779 rules (235 with conclusion selected). Queue: 1115 rules.
+15000 rules inserted. Base: 6858 rules (235 with conclusion selected). Queue: 1099 rules.
+15200 rules inserted. Base: 6935 rules (235 with conclusion selected). Queue: 1085 rules.
+15400 rules inserted. Base: 6959 rules (235 with conclusion selected). Queue: 1067 rules.
+15600 rules inserted. Base: 6843 rules (259 with conclusion selected). Queue: 1031 rules.
+15800 rules inserted. Base: 6780 rules (283 with conclusion selected). Queue: 992 rules.
+16000 rules inserted. Base: 6768 rules (283 with conclusion selected). Queue: 988 rules.
+16200 rules inserted. Base: 6756 rules (283 with conclusion selected). Queue: 984 rules.
+16400 rules inserted. Base: 6784 rules (292 with conclusion selected). Queue: 952 rules.
+16600 rules inserted. Base: 6673 rules (298 with conclusion selected). Queue: 915 rules.
+16800 rules inserted. Base: 6524 rules (303 with conclusion selected). Queue: 914 rules.
+17000 rules inserted. Base: 6570 rules (303 with conclusion selected). Queue: 932 rules.
+17200 rules inserted. Base: 6612 rules (303 with conclusion selected). Queue: 948 rules.
+17400 rules inserted. Base: 6696 rules (305 with conclusion selected). Queue: 990 rules.
+17600 rules inserted. Base: 6801 rules (340 with conclusion selected). Queue: 981 rules.
+17800 rules inserted. Base: 6834 rules (355 with conclusion selected). Queue: 959 rules.
+18000 rules inserted. Base: 6860 rules (355 with conclusion selected). Queue: 926 rules.
+18200 rules inserted. Base: 6885 rules (355 with conclusion selected). Queue: 893 rules.
+18400 rules inserted. Base: 6982 rules (357 with conclusion selected). Queue: 887 rules.
+18600 rules inserted. Base: 7052 rules (359 with conclusion selected). Queue: 888 rules.
+18800 rules inserted. Base: 7078 rules (359 with conclusion selected). Queue: 876 rules.
+19000 rules inserted. Base: 7100 rules (359 with conclusion selected). Queue: 864 rules.
+19200 rules inserted. Base: 7133 rules (359 with conclusion selected). Queue: 860 rules.
+19400 rules inserted. Base: 7167 rules (362 with conclusion selected). Queue: 845 rules.
+19600 rules inserted. Base: 7208 rules (363 with conclusion selected). Queue: 844 rules.
+19800 rules inserted. Base: 7241 rules (363 with conclusion selected). Queue: 845 rules.
+20000 rules inserted. Base: 7289 rules (363 with conclusion selected). Queue: 858 rules.
+20200 rules inserted. Base: 7346 rules (363 with conclusion selected). Queue: 888 rules.
+20400 rules inserted. Base: 7376 rules (363 with conclusion selected). Queue: 892 rules.
+20600 rules inserted. Base: 7390 rules (363 with conclusion selected). Queue: 890 rules.
+20800 rules inserted. Base: 7415 rules (363 with conclusion selected). Queue: 900 rules.
+21000 rules inserted. Base: 7450 rules (363 with conclusion selected). Queue: 941 rules.
+21200 rules inserted. Base: 7494 rules (363 with conclusion selected). Queue: 976 rules.
+21400 rules inserted. Base: 7558 rules (363 with conclusion selected). Queue: 978 rules.
+21600 rules inserted. Base: 7615 rules (363 with conclusion selected). Queue: 980 rules.
+21800 rules inserted. Base: 7734 rules (379 with conclusion selected). Queue: 1000 rules.
+22000 rules inserted. Base: 7855 rules (393 with conclusion selected). Queue: 1004 rules.
+22200 rules inserted. Base: 7937 rules (395 with conclusion selected). Queue: 1000 rules.
+22400 rules inserted. Base: 8019 rules (395 with conclusion selected). Queue: 1004 rules.
+22600 rules inserted. Base: 8113 rules (395 with conclusion selected). Queue: 1008 rules.
+22800 rules inserted. Base: 8222 rules (395 with conclusion selected). Queue: 1000 rules.
+23000 rules inserted. Base: 8306 rules (395 with conclusion selected). Queue: 993 rules.
+23200 rules inserted. Base: 8354 rules (395 with conclusion selected). Queue: 1000 rules.
+23400 rules inserted. Base: 8355 rules (395 with conclusion selected). Queue: 1000 rules.
+23600 rules inserted. Base: 8366 rules (395 with conclusion selected). Queue: 1001 rules.
+23800 rules inserted. Base: 8396 rules (395 with conclusion selected). Queue: 1000 rules.
+24000 rules inserted. Base: 8452 rules (395 with conclusion selected). Queue: 1016 rules.
+24200 rules inserted. Base: 8476 rules (395 with conclusion selected). Queue: 1010 rules.
+24400 rules inserted. Base: 8466 rules (395 with conclusion selected). Queue: 1001 rules.
+24600 rules inserted. Base: 8482 rules (395 with conclusion selected). Queue: 998 rules.
+24800 rules inserted. Base: 8518 rules (395 with conclusion selected). Queue: 1004 rules.
+25000 rules inserted. Base: 8564 rules (395 with conclusion selected). Queue: 1012 rules.
+25200 rules inserted. Base: 8460 rules (395 with conclusion selected). Queue: 980 rules.
+25400 rules inserted. Base: 8395 rules (395 with conclusion selected). Queue: 953 rules.
+25600 rules inserted. Base: 8347 rules (395 with conclusion selected). Queue: 937 rules.
+25800 rules inserted. Base: 8370 rules (395 with conclusion selected). Queue: 919 rules.
+26000 rules inserted. Base: 8384 rules (395 with conclusion selected). Queue: 912 rules.
+26200 rules inserted. Base: 8387 rules (395 with conclusion selected). Queue: 881 rules.
+26400 rules inserted. Base: 8388 rules (395 with conclusion selected). Queue: 850 rules.
+26600 rules inserted. Base: 8385 rules (395 with conclusion selected). Queue: 836 rules.
+26800 rules inserted. Base: 8394 rules (395 with conclusion selected). Queue: 830 rules.
+27000 rules inserted. Base: 8406 rules (405 with conclusion selected). Queue: 804 rules.
+27200 rules inserted. Base: 8405 rules (427 with conclusion selected). Queue: 769 rules.
+27400 rules inserted. Base: 8429 rules (435 with conclusion selected). Queue: 725 rules.
+27600 rules inserted. Base: 8453 rules (441 with conclusion selected). Queue: 688 rules.
+27800 rules inserted. Base: 8402 rules (455 with conclusion selected). Queue: 650 rules.
+28000 rules inserted. Base: 8373 rules (477 with conclusion selected). Queue: 601 rules.
+28200 rules inserted. Base: 8432 rules (486 with conclusion selected). Queue: 574 rules.
+28400 rules inserted. Base: 8443 rules (499 with conclusion selected). Queue: 548 rules.
+28600 rules inserted. Base: 8364 rules (523 with conclusion selected). Queue: 508 rules.
+28800 rules inserted. Base: 8344 rules (523 with conclusion selected). Queue: 483 rules.
+29000 rules inserted. Base: 8404 rules (547 with conclusion selected). Queue: 456 rules.
+29200 rules inserted. Base: 8376 rules (555 with conclusion selected). Queue: 426 rules.
+29400 rules inserted. Base: 8390 rules (573 with conclusion selected). Queue: 395 rules.
+29600 rules inserted. Base: 8462 rules (605 with conclusion selected). Queue: 348 rules.
+29800 rules inserted. Base: 8566 rules (643 with conclusion selected). Queue: 308 rules.
+30000 rules inserted. Base: 8661 rules (683 with conclusion selected). Queue: 288 rules.
+30200 rules inserted. Base: 8806 rules (683 with conclusion selected). Queue: 316 rules.
+30400 rules inserted. Base: 8933 rules (683 with conclusion selected). Queue: 336 rules.
+30600 rules inserted. Base: 9012 rules (699 with conclusion selected). Queue: 320 rules.
+30800 rules inserted. Base: 9136 rules (715 with conclusion selected). Queue: 292 rules.
+31000 rules inserted. Base: 9232 rules (715 with conclusion selected). Queue: 272 rules.
+31200 rules inserted. Base: 9326 rules (715 with conclusion selected). Queue: 224 rules.
+31400 rules inserted. Base: 9414 rules (715 with conclusion selected). Queue: 216 rules.
+31600 rules inserted. Base: 9430 rules (715 with conclusion selected). Queue: 246 rules.
+31800 rules inserted. Base: 9556 rules (715 with conclusion selected). Queue: 288 rules.
+32000 rules inserted. Base: 9710 rules (715 with conclusion selected). Queue: 329 rules.
+32200 rules inserted. Base: 9843 rules (763 with conclusion selected). Queue: 260 rules.
+32400 rules inserted. Base: 9943 rules (779 with conclusion selected). Queue: 272 rules.
+32600 rules inserted. Base: 10011 rules (779 with conclusion selected). Queue: 291 rules.
+32800 rules inserted. Base: 10075 rules (779 with conclusion selected). Queue: 328 rules.
+33000 rules inserted. Base: 10132 rules (779 with conclusion selected). Queue: 344 rules.
+33200 rules inserted. Base: 10189 rules (779 with conclusion selected). Queue: 356 rules.
+33400 rules inserted. Base: 10284 rules (779 with conclusion selected). Queue: 360 rules.
+33600 rules inserted. Base: 10372 rules (779 with conclusion selected). Queue: 366 rules.
+33800 rules inserted. Base: 10446 rules (779 with conclusion selected). Queue: 353 rules.
+34000 rules inserted. Base: 10513 rules (779 with conclusion selected). Queue: 347 rules.
+34200 rules inserted. Base: 10556 rules (779 with conclusion selected). Queue: 357 rules.
+34400 rules inserted. Base: 10591 rules (779 with conclusion selected). Queue: 364 rules.
+34600 rules inserted. Base: 10638 rules (779 with conclusion selected). Queue: 374 rules.
+34800 rules inserted. Base: 10643 rules (779 with conclusion selected). Queue: 379 rules.
+35000 rules inserted. Base: 10634 rules (779 with conclusion selected). Queue: 384 rules.
+35200 rules inserted. Base: 10637 rules (779 with conclusion selected). Queue: 377 rules.
+35400 rules inserted. Base: 10626 rules (779 with conclusion selected). Queue: 362 rules.
+35600 rules inserted. Base: 10546 rules (779 with conclusion selected). Queue: 319 rules.
+35800 rules inserted. Base: 10508 rules (779 with conclusion selected). Queue: 290 rules.
+36000 rules inserted. Base: 10468 rules (779 with conclusion selected). Queue: 267 rules.
+36200 rules inserted. Base: 10356 rules (793 with conclusion selected). Queue: 234 rules.
+36400 rules inserted. Base: 10235 rules (795 with conclusion selected). Queue: 213 rules.
+36600 rules inserted. Base: 10037 rules (807 with conclusion selected). Queue: 191 rules.
+36800 rules inserted. Base: 9938 rules (827 with conclusion selected). Queue: 136 rules.
+37000 rules inserted. Base: 9543 rules (859 with conclusion selected). Queue: 79 rules.
+37200 rules inserted. Base: 9044 rules (891 with conclusion selected). Queue: 16 rules.
+Starting query event(eRConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(ck_1) ==> event(eRevRe(re_1)) || event(eRevKEMEki(kempeki))
+200 rules inserted. Base: 168 rules (0 with conclusion selected). Queue: 192 rules.
+400 rules inserted. Base: 368 rules (0 with conclusion selected). Queue: 192 rules.
+600 rules inserted. Base: 568 rules (0 with conclusion selected). Queue: 192 rules.
+800 rules inserted. Base: 768 rules (0 with conclusion selected). Queue: 192 rules.
+1000 rules inserted. Base: 968 rules (0 with conclusion selected). Queue: 192 rules.
+1200 rules inserted. Base: 1168 rules (0 with conclusion selected). Queue: 176 rules.
+1400 rules inserted. Base: 1368 rules (0 with conclusion selected). Queue: 176 rules.
+1600 rules inserted. Base: 1568 rules (0 with conclusion selected). Queue: 176 rules.
+1800 rules inserted. Base: 1752 rules (0 with conclusion selected). Queue: 176 rules.
+2000 rules inserted. Base: 1952 rules (0 with conclusion selected). Queue: 191 rules.
+2200 rules inserted. Base: 2152 rules (0 with conclusion selected). Queue: 372 rules.
+2400 rules inserted. Base: 2352 rules (0 with conclusion selected). Queue: 472 rules.
+2600 rules inserted. Base: 2465 rules (0 with conclusion selected). Queue: 528 rules.
+2800 rules inserted. Base: 2465 rules (0 with conclusion selected). Queue: 528 rules.
+3000 rules inserted. Base: 2465 rules (0 with conclusion selected). Queue: 528 rules.
+3200 rules inserted. Base: 2571 rules (0 with conclusion selected). Queue: 581 rules.
+3400 rules inserted. Base: 2705 rules (0 with conclusion selected). Queue: 649 rules.
+3600 rules inserted. Base: 2825 rules (0 with conclusion selected). Queue: 704 rules.
+3800 rules inserted. Base: 2875 rules (0 with conclusion selected). Queue: 704 rules.
+4000 rules inserted. Base: 2924 rules (0 with conclusion selected). Queue: 704 rules.
+4200 rules inserted. Base: 2975 rules (0 with conclusion selected). Queue: 704 rules.
+4400 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 704 rules.
+4600 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 704 rules.
+4800 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 704 rules.
+5000 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 698 rules.
+5200 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 643 rules.
+5400 rules inserted. Base: 2993 rules (0 with conclusion selected). Queue: 585 rules.
+5600 rules inserted. Base: 2996 rules (0 with conclusion selected). Queue: 525 rules.
+5800 rules inserted. Base: 3076 rules (0 with conclusion selected). Queue: 444 rules.
+6000 rules inserted. Base: 3156 rules (0 with conclusion selected). Queue: 366 rules.
+6200 rules inserted. Base: 3201 rules (0 with conclusion selected). Queue: 352 rules.
+6400 rules inserted. Base: 3216 rules (0 with conclusion selected). Queue: 352 rules.
+6600 rules inserted. Base: 3384 rules (0 with conclusion selected). Queue: 352 rules.
+6800 rules inserted. Base: 3521 rules (0 with conclusion selected). Queue: 352 rules.
+7000 rules inserted. Base: 3521 rules (0 with conclusion selected). Queue: 352 rules.
+7200 rules inserted. Base: 3521 rules (0 with conclusion selected). Queue: 352 rules.
+7400 rules inserted. Base: 3521 rules (0 with conclusion selected). Queue: 352 rules.
+7600 rules inserted. Base: 3680 rules (0 with conclusion selected). Queue: 638 rules.
+7800 rules inserted. Base: 3784 rules (0 with conclusion selected). Queue: 640 rules.
+8000 rules inserted. Base: 3926 rules (0 with conclusion selected). Queue: 640 rules.
+8200 rules inserted. Base: 4059 rules (0 with conclusion selected). Queue: 640 rules.
+8400 rules inserted. Base: 4240 rules (0 with conclusion selected). Queue: 640 rules.
+8600 rules inserted. Base: 4194 rules (0 with conclusion selected). Queue: 599 rules.
+8800 rules inserted. Base: 4161 rules (0 with conclusion selected). Queue: 576 rules.
+9000 rules inserted. Base: 4161 rules (0 with conclusion selected). Queue: 576 rules.
+9200 rules inserted. Base: 4161 rules (0 with conclusion selected). Queue: 544 rules.
+9400 rules inserted. Base: 4225 rules (0 with conclusion selected). Queue: 461 rules.
+9600 rules inserted. Base: 4257 rules (0 with conclusion selected). Queue: 385 rules.
+9800 rules inserted. Base: 4289 rules (0 with conclusion selected). Queue: 312 rules.
+10000 rules inserted. Base: 4249 rules (0 with conclusion selected). Queue: 272 rules.
+10200 rules inserted. Base: 3364 rules (0 with conclusion selected). Queue: 272 rules.
+10400 rules inserted. Base: 2773 rules (0 with conclusion selected). Queue: 256 rules.
+10600 rules inserted. Base: 2225 rules (0 with conclusion selected). Queue: 240 rules.
+10800 rules inserted. Base: 1784 rules (0 with conclusion selected). Queue: 231 rules.
+11000 rules inserted. Base: 1774 rules (4 with conclusion selected). Queue: 229 rules.
+11200 rules inserted. Base: 1833 rules (88 with conclusion selected). Queue: 120 rules.
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,dhekR),ldhI_1))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,dhekR),ldhI_1))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && attacker(p) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,ldhR_1),dhekI))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && attacker(p_1) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p_1),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p_1)))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && attacker(p_1) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p_1),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p_1)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && attacker(sidR_3) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,dhekR),ldhI_1))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_3,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,dhekR),ldhI_1))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && attacker(sidI_3) && attacker(p) && b-event(@p_act(@occ106_1,(sxI[],(sidI_3,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,ldhR_1),dhekI))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_3,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),p)))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,ldhR_1),dhekI),h(rb_1)))),(exp(exp(g,ldhR_1),ldhI_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekR),dhekI),h(re_1)))),(exp(exp(g,dhekR),ldhI_1),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && b-event(@p_act(@occ106_1,(sxI[],(sidI_1,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_1,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],firstI)))))) && b-event(@p_act(@occ106_1,(sxI[],(sidI_1,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_1,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+firstI = firstI_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && b-event(@p_act(@occ106_1,(sxI[],(sidI_1,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_1,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevKEMEki(pk(kemekI))) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+goal reachable: attacker(p) && b-event(@p_act(@occ155_1,(sxTi0[],(sidR_1,(szerostring[],aead(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),szerostring[],sempty[],p)))))) && b-event(@p_act(@occ48_1,(sxR[],(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),(aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[]),mac(h((snoise[],(pk(kemltkI_1),psk_4))),(sidI_1,(sidR_1,(exp(g,dhekR),(aenc(h(re_1),pk(kemekI)),(senc(aenc(h(ra_1),pk(kemltkI_1)),h(exp(exp(g,ldhI_1),dhekR))),aead(kdf3((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)),szerostring[],h((h((h((h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),kdf2((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),sempty[])))))))))))))))) && b-event(@p_act(@occ106_1,(sxI[],(sidI_1,(exp(g,dhekI),(pk(kemekI),(senc(aenc(h(rb_1),pk(kemltkR_1)),h(exp(exp(g,dhekI),ldhR_1))),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),(aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts),mac(h((snoise[],(pk(kemltkR_1),psk_4))),(sidI_1,(exp(g,dhekI),(pk(kemekI),(aenc(h(rb_1),pk(kemltkR_1)),(aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))),aead(kdf2((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),szerostring[],h((h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),aead(kdf2((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),szerostring[],h((h((h((h(snoise[]),sident[])),(exp(g,ldhR_1),pk(kemltkR_1)))),(exp(g,dhekI),pk(kemekI)))),h((pk(kemltkI_1),exp(g,ldhI_1)))))),ts)))))))))))))))) && b-event(eRevRe(re_1)) -> event(eRConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))),pk(kemltkI_1),pk(kemltkR_1),exp(g,ldhI_1),exp(g,ldhR_1),pk(kemekI),exp(g,dhekI),exp(g,dhekR),psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(kdf1(kdf2(kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((kdf1((h(snoise[]),(exp(g,dhekI),pk(kemekI)))),(exp(exp(g,dhekI),ldhR_1),h(rb_1)))),(exp(exp(g,ldhI_1),ldhR_1),h((pk(kemltkI_1),pk(kemltkR_1)))))),(exp(g,dhekR),aenc(h(re_1),pk(kemekI))))),(exp(exp(g,dhekI),dhekR),h(re_1)))),(exp(exp(g,ldhI_1),dhekR),h(ra_1)))),psk_4)))))
+Abbreviations:
+dhekI = dhekI_2[!2 = @sid,!1 = @sid_1]
+kemekI = kemekI_2[!2 = @sid,!1 = @sid_1]
+ldhR_1 = ldhR_2[!1 = @sid_1]
+rb_1 = rb_2[!2 = @sid,!1 = @sid_1]
+ldhI_1 = ldhI_2[!1 = @sid_1]
+kemltkI_1 = kemltkI_2[!1 = @sid_1]
+kemltkR_1 = kemltkR_2[!1 = @sid_1]
+dhekR = dhekR_2[!2 = @sid_2,!1 = @sid_1]
+re_1 = re_2[!2 = @sid_2,!1 = @sid_1]
+ra_1 = ra_2[!2 = @sid_2,!1 = @sid_1]
+psk_4 = psk_2[!1 = @sid_1]
+@occ155_1 = @occ155[!2 = @sid_2,!1 = @sid_1]
+sidR_1 = sidR[!2 = @sid_2,!1 = @sid_1]
+@occ48_1 = @occ48[!2 = @sid,!1 = @sid_1]
+sidI_1 = sidI_2[!2 = @sid,!1 = @sid_1]
+ts = ts_2[!2 = @sid,!1 = @sid_1]
+@occ106_1 = @occ106[!2 = @sid_2,!1 = @sid_1]
+RESULT event(eRConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(ck_1) ==> event(eRevRe(re_1)) || event(eRevKEMEki(kempeki)) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query event(eRConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && event(eIConfirm(ck_1,kemltki,kemltkr_1,ldhi,ldhr,kempeki,dheki,dhekr,psk_4,h(rb_1),h(ra_1),h(re_1))) && attacker(ck_1) ==> event(eRevRe(re_1)) || event(eRevKEMEki(kempeki)) is true.
+
+--------------------------------------------------------------
+

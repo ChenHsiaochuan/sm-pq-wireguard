@@ -1,0 +1,5 @@
+proverif proverif-strong-secrecy-Psk-Siq-Rr-Re-Ei-Tr-Ti.pv > proverif-strong-secrecy-Psk-Siq-Rr-Re-Ei-Tr-Ti.pv.log
+proverif proverif-strong-secrecy-Psk-Srq.pv > proverif-strong-secrecy-Psk-Srq.pv.log
+proverif proverif-strong-secrecy-Psk-Ri-Ti.pv > proverif-strong-secrecy-Psk-Ri-Ti.pv.log                
+proverif proverif-strong-secrecy-reveal-all-but-Psk.pv > proverif-strong-secrecy-reveal-all-but-Psk.pv.log
+proverif proverif-strong-secrecy-Psk-Siq-Ri-Rr-Re-Eiq-Tr.pv > proverif-strong-secrecy-Psk-Siq-Ri-Rr-Re-Eiq-Tr.pv.log

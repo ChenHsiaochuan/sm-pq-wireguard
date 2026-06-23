@@ -1,0 +1,1206 @@
+#ifdef all_trusted
+
+export queries:
+
+"
+
+noselect x:bitstring; attacker(exp(g,x)).
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMLtk(kemltkr)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhi)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhi)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhi)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMLtk(kemltkr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltki)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevLDH(ldhr)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMLtk(kemltkr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMLtk(kemltkr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMLtk(kemltkr)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevLDH(ldhr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhi)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhi)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevKEMEki(kempeki)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevLDH(ldhr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevLDH(ldhr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevLDH(ldhr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevLDH(ldhr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevLDH(ldhr)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dheki)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevKEMEki(kempeki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevPre(ldhi, ldhr)) || event(eRevPre(ldhr, ldhi)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevDHE(dhekr)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dheki)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevKEMEki(kempeki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMEki(kempeki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevKEMEki(kempeki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevKEMEki(kempeki)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRa(ra)) || event(eRevDHE(dheki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevDHE(dheki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dheki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dheki)) || event(eRevDHE(dhekr)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevDHE(dheki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dheki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dheki)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dheki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dheki)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dheki)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRb(rb)) || event(eRevDHE(dhekr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dhekr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dhekr)) || event(eRevRa(ra)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevDHE(dhekr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dhekr)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevDHE(dhekr)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevRe(re)) || event(eRevRa(ra)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRa(ra)) || event(eRevRb(rb)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRa(ra)) || event(eRevRe(re)).
+
+query kemltki:bitstring, kemltkr:bitstring, ldhi:bitstring, ldhr:bitstring, kempeki:bitstring, dheki:bitstring, dhekr:bitstring, psk:bitstring, ck:bitstring, rb:bitstring, ra:bitstring, re:bitstring;
+event(eR_SK7(ck, kemltki, kemltkr, ldhi, ldhr, kempeki, dheki, dhekr, psk, h(rb), h(ra), h(re))) && attacker(ck)
+==> event(eRevPsk(psk)) || event(eRevRb(rb)) || event(eRevRe(re)).
+
+"
+
+#endif
+

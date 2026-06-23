@@ -1,0 +1,97 @@
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+USER root
+
+WORKDIR /data
+
+RUN mkdir artifacts_evaluation
+RUN mkdir artifacts_implementation
+
+COPY artifacts_evaluation artifacts_evaluation
+COPY artifacts_implementation artifacts_implementation
+
+
+RUN cd artifacts_evaluation && \
+    find . -type f -name "*.sh" -exec chmod +x {} + && \
+    chmod -R a+rx . && \
+    cd ..
+
+RUN cd artifacts_implementation && \
+    find . -type f -name "*.sh" -exec chmod +x {} + && \
+    chmod -R a+rx . && \
+    cd ..
+
+
+RUN sysctl -w net.ipv6.conf.all.disable_ipv6=1 &&  sysctl -w net.ipv6.conf.default.disable_ipv6=1 &&  sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+
+RUN apt update -y  
+RUN apt full-upgrade -y
+RUN apt install software-properties-common -y
+RUN add-apt-repository ppa:avsm/ppa -y
+RUN apt install rename time libgtk2.0-dev pkg-config opam haskell-stack curl make unzip graphviz build-essential bubblewrap parallel python3-pip locales libssl-dev cmake clang -y
+
+RUN pip3 install sympy --break-system-packages --no-warn-script-location
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
+
+
+RUN useradd -ms /bin/bash user && \
+    usermod -aG sudo user && \
+    echo "user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    mkdir -p /home/user/.local/bin && \
+    chown -R user:user /home/user
+
+RUN cp -R artifacts_evaluation /home/user/artifacts_evaluation && \
+    chown -R user:user /home/user/artifacts_evaluation
+
+RUN cp -R artifacts_implementation /home/user/artifacts_implementation && \
+    chown -R user:user /home/user/artifacts_implementation
+
+COPY run_basic_test.sh /home/user/run_basic_test.sh
+RUN chmod +x /home/user/run_basic_test.sh
+
+USER user
+WORKDIR /home/user
+ENV PATH="/home/user/.local/bin:$PATH"
+
+
+RUN curl -L https://github.com/maude-lang/Maude/releases/download/Maude3.5/Maude-3.5-linux-x86_64.zip -o maude.zip && \
+    unzip -oj maude.zip -d /home/user/.local/bin/ && \
+    chmod a+x /home/user/.local/bin/maude && \
+    rm maude.zip
+
+RUN stack update && \
+    stack upgrade 
+
+RUN git clone https://github.com/tamarin-prover/tamarin-prover.git &&  \
+    cd tamarin-prover && \
+    stack update && \
+    stack upgrade && \
+    git checkout 1.10.0 && \
+    make default && \
+    cd ..
+
+RUN opam init --disable-sandboxing && \
+    opam install -y "proverif=2.05"
+
+RUN eval $(opam env) && \
+    opam install -y ocamlbuild && \
+    git clone https://github.com/DeepSec-prover/deepsec.git && \
+    cd deepsec && \
+    git checkout 8ddc45e && \
+    make && \
+    cp deepsec /home/user/.local/bin/ && \
+    cp deepsec_worker /home/user/.local/bin/ && \
+    cp deepsec_api /home/user/.local/bin/ && \
+    mkdir -p /home/user/.deepsec/result_files && \
+    rm -rf /home/user/.deepsec/result_files/*
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    $HOME/.cargo/bin/rustup default 1.87.0
+
+WORKDIR /home/user

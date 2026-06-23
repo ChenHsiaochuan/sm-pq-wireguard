@@ -1,0 +1,4 @@
+proverif wireguard_secrecy_isk7_psk.pv > wireguard_secrecy_isk7_psk.pv.log
+proverif wireguard_secrecy_isk7_kemltkr_rb.pv > wireguard_secrecy_isk7_kemltkr_rb.pv.log
+proverif wireguard_secrecy_isk7_ldhr_dheki.pv > wireguard_secrecy_isk7_ldhr_dheki.pv.log
+proverif wireguard_secrecy_isk7_ldhi_ldhr_precompi.pv > wireguard_secrecy_isk7_ldhi_ldhr_precompi.pv.log

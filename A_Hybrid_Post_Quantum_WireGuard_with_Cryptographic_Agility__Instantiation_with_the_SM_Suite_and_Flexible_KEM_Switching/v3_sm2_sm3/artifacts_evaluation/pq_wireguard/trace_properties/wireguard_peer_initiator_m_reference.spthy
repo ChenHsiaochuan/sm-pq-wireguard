@@ -1,0 +1,99 @@
+/*
+ * Artifacts for Usenix 2025 paper "A Tale of Two Worlds, a Formal Story of WireGuard Hybridization"
+ */
+
+// beginning of initiator process
+
+let Initiator(~kemltkI, tpkI, kempkR, psk) =
+
+    let kempkI = pk(~kemltkI) in
+    in(~rb);
+    in(~kemekI);
+    new ~ts;
+    new sidI;
+
+    //InitHello generation
+
+    let kempekI = pk(~kemekI) in
+    let ck=h('noise') in
+    let kb = h(<~rb, tpkI>) in
+
+    (   // This parallelizes kemekI, rb compromise
+
+      let hi0   = h(<ck, 'ident'>) in
+      let hi1   = h(<hi0, kempkR>) in
+      let ci0   = kdf1(<ck, kempekI>) in
+
+      let ct1 = aenc(kb, kempkR) in 
+      
+      let hi2   = h(<hi1, kempekI>) in
+      let ci1   = kdf1(<ci0, kb>) in
+      let ki1   = kdf2(<ci0, kb>) in
+
+   
+      let astat = aead(ki1, 'zerostring', hi2, h(kempkI)) in
+      let hi3   = h(<hi2, astat>) in
+      let ci2 = kdf1(<ci1, psk>) in 
+      let ki2 = kdf2(<ci1, psk>) in 
+      let ats = aead(ki2, 'zerostring', hi3, ~ts) in
+      let hi4   = h(<hi3, ats>) in
+
+      let kmacI1 = h(<'noise', kempkR>) in
+      let macI1 = mac(kmacI1, <sidI, kempekI, ct1, astat, ats>) in
+
+      event ISend(ki2, kempkI, kempkR, tpkI, kempekI, psk, kb);
+      out(<'xI', sidI, kempekI, ct1, astat, ats, macI1>);    // Send InitHello
+
+      // RecHello reception
+
+      let kmacR = h(<'noise', kempkI>) in        // mac key
+      in(<'xR', sidIR, sidR, ct2, ct3, aempt, macR>);   // Receive RecHello
+
+      if((checkmac(kmacR, <sidIR, sidR, ct2, ct3, aempt>, macR)=true)) then
+      (
+          if(sidIR=sidI) then
+              (
+
+                  let ke = adec(ct2, ~kemekI) in
+                  let ka = adec(ct3, ~kemltkI) in
+
+                  let ci3   = kdf1(<ci2, ct2>) in
+                  let hi5   = h(<hi4, ct2>) in
+                  let ci4   = kdf1(<ci3, ke>) in
+                  let ci5   = kdf1(<ci4, ka>) in
+                  let ci6   = kdf1(<ci5, psk>) in
+                  let hit   = kdf2(<ci5, psk>) in
+                  let ki6   = kdf3(<ci5, psk>) in
+                  let hi6   = h(<hi5, hit>) in
+
+                  let dempty = decrypt(ki6, 'zerostring', aempt) in
+
+                  if(checkaead(ki6, 'zerostring', hi6, aempt) = true) then
+                      (
+
+                      if(dempty='empty') then
+                      (
+                      event IKeys(ki6, kempkI, kempkR, tpkI, kempekI, psk, kb, ka, ke);
+
+                      let hi7 = h(<hi6, aempt>) in
+
+                      let ci7 = kdf1(ci6) in
+                      let ki7 = kdf2(ci6) in
+                      event I_SK7(ki7, kempkI, kempkR, tpkI, kempekI, psk, kb, ka, ke);
+
+                      // confirm message for pq-wg
+                      let conf = aead(ki7, 'zerostring', hi7, 'empty') in
+                      let macI1Conf = mac(kmacI1, <sidI, sidR, conf>) in
+                      
+                      event IConfirm(ki7, kempkI, kempkR, tpkI, kempekI, psk, kb, ka, ke);
+                      out(<'xTi0', sidI, sidR, conf, macI1Conf>)    // Send Confirm
+                      )
+                      ) // chekaead & dempty = 'empty'
+             ) // sidIR = sidI
+      )   // checkmac
+    )     // This parallelizes ekI, rb compromise
+    //| (RevealKEMEki(~kemekI))
+    //| (RevealRb(~rb))
+
+// end of initiator process
+

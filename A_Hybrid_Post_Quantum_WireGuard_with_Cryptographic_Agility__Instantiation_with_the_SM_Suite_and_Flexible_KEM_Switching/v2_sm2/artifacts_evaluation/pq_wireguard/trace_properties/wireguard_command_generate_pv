@@ -1,0 +1,14 @@
+python3 __scripts__/generate_pv_uniqueness_initiator.py
+python3 __scripts__/generate_pv_uniqueness_responder.py
+python3 __scripts__/generate_pv_unilateral_initiator.py
+python3 __scripts__/generate_pv_unilateral_responder.py
+python3 __scripts__/generate_pv_bilateral.py
+python3 __scripts__/generate_pv_secrecy_isk7.py
+python3 __scripts__/generate_pv_secrecy_rsk7.py
+python3 __scripts__/generate_pv_secrecy_mut7.py
+python3 __scripts__/generate_pv_secrecy_isk7pfs.py
+python3 __scripts__/generate_pv_secrecy_rsk7pfs.py
+python3 __scripts__/generate_pv_secrecy_mut7pfs.py
+python3 __scripts__/generate_pv_agreement_inithello.py
+python3 __scripts__/generate_pv_agreement_rechello.py
+python3 __scripts__/generate_pv_agreement_confirm.py

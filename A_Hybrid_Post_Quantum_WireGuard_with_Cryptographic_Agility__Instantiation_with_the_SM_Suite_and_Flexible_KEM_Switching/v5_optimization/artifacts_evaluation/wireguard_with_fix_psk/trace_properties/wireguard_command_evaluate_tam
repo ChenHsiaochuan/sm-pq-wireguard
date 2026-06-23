@@ -1,0 +1,11 @@
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_uniqueness_initiator.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_uniqueness_initiator.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_uniqueness_responder.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_uniqueness_responder.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_agreement_inithello.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_agreement_inithello.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_agreement_rechello.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_agreement_rechello.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_agreement_confirm.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_agreement_confirm.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_isk7.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_isk7.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_rsk7.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_rsk7.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_mul7.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_mul7.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_isk7pfs.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_isk7pfs.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_rsk7pfs.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_rsk7pfs.spthy.log 2> /dev/null
+tamarin-prover --derivcheck-timeout=0 tamarin/wireguard_secrecy_mul7pfs.spthy +RTS -N5 -RTS --prove > tamarin/wireguard_secrecy_mul7pfs.spthy.log 2> /dev/null

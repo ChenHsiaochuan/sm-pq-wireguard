@@ -1,0 +1,113 @@
+/*
+ * Artifacts for Usenix 2025 paper "A Tale of Two Worlds, a Formal Story of WireGuard Hybridization"
+ */
+
+// beginning of responder process
+
+let Responder(~ldhR, dhpkI, ~psk) =
+
+    let dhpkR = 'g'^(~ldhR) in
+    new stamp;
+    new sidR;
+    new ~dhekR;
+    let ctrI0 = 'zerostring' in
+    let dhpekR = 'g'^(~dhekR) in
+    let srsi = dhpkI^~ldhR in
+
+    ( // This parallelizes dhekr compromise
+
+    // InitHello reception
+    let ck = h('noise') in
+
+    in(<'xI', sidI, dhpekI, astat, ats, macI1>);     // Receive InitHello
+
+    let eisr  = dhpekI^~ldhR in
+    let hr0 = h(<ck, 'ident'>) in
+    let hr1 = h(<hr0, dhpkR>) in
+    let cr0   = kdf1(<ck, dhpekI>) in
+    let hr2   = h(<hr1, dhpekI>) in
+    let cr1   = kdf1(<cr0, eisr>) in
+    let kr1   = kdf2(<cr0, eisr>) in
+    let dpki = decrypt(kr1, 'zerostring', astat) in
+
+    if(not (dhpekI = 'g')) then
+        (
+        if(checkaead(kr1, 'zerostring', hr2, astat) = true) then
+        (
+        let kmacI1 = h(<'noise', dhpkR, ~psk>) in        // mac key
+
+        if(checkmac(kmacI1, <sidI, dhpekI, astat, ats>, macI1) = true) then
+        (
+
+            if(dpki= dhpkI) then
+            (
+            let hr3   = h(<hr2, astat>) in
+            let cr2   = kdf1(<cr1, srsi>) in
+            let kr2   = kdf2(<cr1, srsi>) in
+            let dtime = decrypt(kr2, 'zerostring', ats) in
+
+            if(checkaead(kr2, 'zerostring', hr3, ats) = true) then
+                (
+
+                let hr4 = h(<hr3, ats>) in
+
+                event RRec(kr2, dpki, dhpkR, dhpekI, dhpekR, ~psk);
+
+                // Rechello generation
+
+                let eier  = dhpekI^~dhekR in
+                let sier  = dhpkI^~dhekR in
+                let cr3 = kdf1(<cr2, dhpekR>) in
+                let hr5 = h(<hr4, dhpekR>) in
+                let cr4 = kdf1(<cr3, eier>) in
+                let cr5 = kdf1(<cr4, sier>) in
+                let cr6 = kdf1(<cr5, ~psk>) in
+                let hrt = kdf2(<cr5, ~psk>) in
+                let kr6 = kdf3(<cr5, ~psk>) in
+                let hr6 = h(<hr5, hrt>) in
+
+                let aempt = aead(kr6, 'zerostring', hr6, 'empty') in
+                let hr7 = h(<hr6, aempt>) in
+
+                let kmacR = h(<'noise', dhpkI, ~psk>) in        // mac key
+                let macR = mac(kmacR, <sidI, sidR, dhpekR, aempt>) in
+
+                event RKeys(kr6, dhpkI, dhpkR, dhpekI, dhpekR, ~psk);
+                out(<'xR', sidI, sidR, dhpekR, aempt, macR>);  // Send RecHello
+
+                let cr7 = kdf1(cr6) in
+                let kr7 = kdf2(cr6) in
+                event R_SK7(kr7, dhpkI, dhpkR, dhpekI, dhpekR, ~psk);
+
+
+                let keyItoR = kdf1(kr7) in
+                event R_SK_ItoR(keyItoR, dhpkI, dhpkR, dhpekI, dhpekR, ~psk);
+                let keyRtoI = kdf2(kr7) in
+                event R_SK_RtoI(keyRtoI, dhpkI, dhpkR, dhpekI, dhpekR, ~psk);
+
+                // receive first message I->R
+                in(<'xTi0', sidC, cI0, confirmI>);
+
+                if (sidC = sidR) then 
+                (
+                if (cI0 = 'zerostring') then // true
+
+                    (
+                    let dfirstI = decrypt(keyItoR, cI0, confirmI) in
+                    if(checkaead(keyItoR, cI0, 'empty', confirmI) = true) then
+                        (
+                            event RConfirm(keyItoR, dhpkI, dhpkR, dhpekI, dhpekR, ~psk)//;
+                        )
+                    )
+                )   // sidC = sidR
+                )   // checkaead
+              )    // dpki= dhpkI
+        )   // checkmac
+        )   // checkaead
+        )   //not (dhpekI = 'g') 
+    ) // This parallelizes dhekr compromise
+  | (RevealDHE(~dhekR))
+
+// end of responder process
+
+

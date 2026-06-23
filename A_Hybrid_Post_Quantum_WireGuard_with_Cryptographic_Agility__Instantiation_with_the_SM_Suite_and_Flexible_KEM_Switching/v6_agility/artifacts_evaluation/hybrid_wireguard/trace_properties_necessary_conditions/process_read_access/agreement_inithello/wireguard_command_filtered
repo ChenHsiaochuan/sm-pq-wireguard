@@ -1,0 +1,2 @@
+proverif wireguard_agreement_inithello_psk.pv > wireguard_agreement_inithello_psk.pv.log
+proverif wireguard_agreement_inithello_ldhi_ldhr_precompi.pv > wireguard_agreement_inithello_ldhi_ldhr_precompi.pv.log
